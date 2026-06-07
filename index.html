@@ -879,15 +879,17 @@
         "Is your YouTuber known by kids?"
 
     ];
-    function startGame(){
+function startGame(){
 
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("gamePage").style.display = "flex";
 
-        document.getElementById("homePage").style.display = "none";
-        document.getElementById("gamePage").style.display = "flex";
+    currentQuestion = -1;
 
+    document.getElementById("question").textContent =
+    "ARE YOU READY TO PLAY GUESS THE YOUTUBER!?";
 
-    }
-
+}
     function answer(type){
 
 
@@ -902,6 +904,13 @@
     }
 
 function nextQuestion(){
+
+    if(currentQuestion === -1){
+    currentQuestion = 0;
+    document.getElementById("question").textContent =
+    questions[0];
+    return;
+}
 
     if(confidence >= 200){
         makeGuess();
