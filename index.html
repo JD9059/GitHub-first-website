@@ -890,26 +890,31 @@ function startGame(){
     "ARE YOU READY TO PLAY GUESS THE YOUTUBER!?";
 
 }
+
     function answer(type){
 
-
-        if(type === "yes") confidence += 20;
-        if(type === "probably") confidence += 15;
-        if(type === "probablynot") confidence += 8;
-        if(type === "dk") confidence += 3;
-
+    if(currentQuestion === -1){
         nextQuestion();
-
-
+        return;
     }
+
+    if(type === "yes") confidence += 20;
+    if(type === "probably") confidence += 15;
+    if(type === "probablynot") confidence += 8;
+    if(type === "dk") confidence += 3;
+
+    nextQuestion();
+
+}
+
 
 function nextQuestion(){
 
     if(currentQuestion === -1){
-    currentQuestion = 0;
-    document.getElementById("question").textContent =
-    questions[0];
-    return;
+        currentQuestion = 0;
+        document.getElementById("question").textContent =
+        questions[0];
+        return;
     }
 
     if(confidence >= 200){
@@ -918,9 +923,6 @@ function nextQuestion(){
     }
 
     currentQuestion++;
-
-    ...
-}
 
     if(currentQuestion < questions.length){
 
@@ -931,9 +933,11 @@ function nextQuestion(){
 
         makeGuess();
 
-    } 
+    }
 
 }
+
+
     function makeGuess(){
 
         document.getElementById("answerButtons").style.display = "none";
