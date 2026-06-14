@@ -11,1094 +11,296 @@
             text-align: center;
         }
 
-#homePage,
-#gamePage,
-#winnerPage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+        #homePage,
+        #gamePage,
+        #winnerPage {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-#gamePage,
-#winnerPage {
-    display: none;
-}
+        #gamePage,
+        #winnerPage {
+            display: none;
+        }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 900px;
-    width: 90%;
-    padding: 20px;
-}
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 900px;
+            width: 90%;
+            padding: 20px;
+        }
 
-/* FLOAT ANIMATION */
-@keyframes floatPirate {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
+        /* FLOAT ANIMATION */
+        @keyframes floatPirate {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
-/* GAME PIRATE IMAGE */
-.pirate-img {
-    width: 160px;
-    max-width: 40vw;
-    height: auto;
-    display: block;
-    margin-bottom: 15px;
-    animation: floatPirate 3s ease-in-out infinite;
-}
+        .flag {
+            font-size: 90px;
+            animation: floatPirate 3s ease-in-out infinite;
+        }
 
-/* HOME FLAG (emoji) */
-.flag {
-    font-size: 90px;
-    animation: floatPirate 3s ease-in-out infinite;
-}
+        #question {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            max-width: 900px;
+        }
 
-/* QUESTION TEXT */
-#question {
-    font-size: 36px;
-    font-weight: bold;
-    margin-bottom: 25px;
-    max-width: 900px;
-}
+        .button {
+            padding: 12px 24px;
+            margin: 5px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
 
-/* BUTTON BASE */
-.button {
-    padding: 12px 24px;
-    margin: 5px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 18px;
-}
+        .yesBtn { background: limegreen; color: white; }
+        .noBtn { background: red; color: white; }
+        .dkBtn { background: gray; color: white; }
+        .probBtn { background: gold; }
+        .probNotBtn { background: orange; }
 
-/* ANSWER BUTTONS */
-.yesBtn {
-    background: limegreen;
-    color: white;
-}
+        .utilityBtn {
+            background: white;
+        }
 
-.noBtn {
-    background: red;
-    color: white;
-}
+        textarea {
+            width: 300px;
+            height: 100px;
+            font-size: 16px;
+            padding: 10px;
+            margin-top: 15px;
+        }
 
-.dkBtn {
-    background: gray;
-    color: white;
-}
+        .input {
+            padding: 10px;
+            font-size: 18px;
+            width: 300px;
+        }
 
-.probBtn {
-    background: gold;
-}
+        form {
+            margin-top: 20px;
+        }
 
-.probNotBtn {
-    background: orange;
-}
-
-/* UTILITY BUTTONS */
-.utilityBtn {
-    background: white;
-}
-
-/* INPUT BOX */
-.input {
-    padding: 10px;
-    font-size: 18px;
-    width: 300px;
-}
-
+        .pirate-img {
+            width: 200px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
+
 <body>
 
 <!-- HOME PAGE -->
-
 <div id="homePage">
-
     <div class="container">
 
         <div class="flag">🏴‍☠️</div>
- 
-
-    
 
         <h1>Captain Clue</h1>
-    
 
+        <p>Think of a YouTuber and I'll try to guess who it is!</p>
 
-        <p>
-            Think of a YouTuber and I'll try to guess who it is!
-        </p>
+        <button onclick="startGame()">Start Game</button>
 
-        <button onclick="startGame()">
-            Start Game
-        </button>
+        <form action="https://formspree.io/f/xgobrrnl" method="POST">
+            <textarea name="feedback" placeholder="Tell Captain Clue what you think!" required></textarea>
+            <br><br>
+            <button type="submit">Send Feedback</button>
+        </form>
 
     </div>
-
 </div>
 
-<!-- GAME PAGE -->  
-
+<!-- GAME PAGE -->
 <div id="gamePage">
-
     <div class="container">
 
         <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
 
-        <div id="question">
-            Is your YouTuber known for gaming?
-        </div>
+        <div id="question"></div>
 
-
-<div id="answerButtons">
-
-            <button class="yesBtn" onclick="answer('yes')">
-                Yes
-            </button>
-
-            <button class="noBtn" onclick="answer('no')">
-                No
-            </button>
-
-            <button class="dkBtn" onclick="answer('dk')">
-                Don't Know
-            </button>
-
-            <button class="probBtn" onclick="answer('probably')">
-                Probably
-            </button>
-
-            <button class="probNotBtn" onclick="answer('probablynot')">
-                Probably Not
-            </button>
-
+        <div id="answerButtons">
+            <button class="yesBtn" onclick="answer('yes')">Yes</button>
+            <button class="noBtn" onclick="answer('no')">No</button>
+            <button class="dkBtn" onclick="answer('dk')">Don't Know</button>
+            <button class="probBtn" onclick="answer('probably')">Probably</button>
+            <button class="probNotBtn" onclick="answer('probablynot')">Probably Not</button>
         </div>
 
         <br>
 
-        <div>
-
-            <button class="utilityBtn" onclick="goBack()">
-                ⬅️ Go Back
-            </button>
-
-            <button class="utilityBtn" onclick="skipQuestion()">
-                ⏭️ Skip
-            </button>
-
-            <button class="utilityBtn" onclick="restartGame()">
-                🔄 Restart
-            </button>
-
+        <div id="utilityButtons">
+            <button class="utilityBtn" onclick="goBack()">⬅️ Go Back</button>
+            <button class="utilityBtn" onclick="skipQuestion()">⏭️ Skip</button>
+            <button class="utilityBtn" onclick="restartGame()">🔄 Restart</button>
         </div>
 
     </div>
-
 </div>
 
 <!-- WINNER PAGE -->
-
 <div id="winnerPage">
-
     <div class="container">
 
         <h2>🏆 You Win!</h2>
 
-        <p>
-            Who were you thinking of?
-        </p>
+        <p>Who were you thinking of?</p>
 
-        <input
-        id="newYoutuber"
-        placeholder="Type YouTuber name">
+        <input id="newYoutuber" placeholder="Type YouTuber name">
 
         <br><br>
 
-        <button onclick="saveNewYoutuber()">
-            Save
-        </button>
+        <button onclick="saveNewYoutuber()">Save</button>
 
     </div>
-
 </div>
 
 <script>
 
-    let currentQuestion = 0;
-    let confidence = 0;
-    let skippedQuestions = [];
+let currentQuestion = 0;
+let confidence = 0;
+let skippedQuestions = [];
 
-    let youtubers = [
-        "MrBeast",
-        "DanTDM",
-        "Preston",
-        "Unspeakable",
-        "Flamingo",
-        "ThinkNoodles",
-        "PewDiePie",
-        "Markiplier",
-        "Jacksepticeye",
-        "Ryan's World",
-        "SSSniperWolf",
-        "Aphmau",
-        "Dream",
-        "Technoblade",
-        "LankyBox",
-        "CoryxKenshin",
-        "KreekCraft",
-        "Ninja",
-        "LazarBeam",
-        "Typical Gamer",
-        "BajanCanadian",
-        "TheCampingRusher",
-        "Bodil40",
-        "AntVenom",
-        "SkyDoesMinecraft",
-        "Deadlox",
-        "MitchGames247",
-        "HuskyMudkipz",
+let youtubers = [
+    "MrBeast", "DanTDM", "Preston", "Unspeakable", "Flamingo",
+    "ThinkNoodles", "PewDiePie", "Markiplier", "Jacksepticeye",
+    "Dream", "Technoblade", "Ludwig", "SSSniperWolf"
+];
 
-"Bald and Bankrupt",   "TrueMU",
-        "PeteZahHutt",
-        "Vikkstar123",
-        "Woofless",
-        "PrestonGamez",
-        "TheAtlanticCraft",
-        "CavemanFilms",
-        "AviatorGaming",
-        "MrCrainer",
-        "TheDiamondMinecart",
-        "Rythian",
-        "Sjin",
-        "Duncan",
-        "Martyn",
-        "CaptainSparklez2",
-        "VintageBeef",
-        "PauseUnpause",
-        "Guude",
-        "BdoubleO100",
-        "KurtJMac",
-        "Monkeyfarm",
-        "Etho",
-        "GenerikB",
-        "Zisteau",
-        "Aureylian",
-        "iHasCupquake",
-        "Strawburry17",
-        "LDShadowLady",
-        "Yammy",
-        "StacyPlays",
-        "AshDubh",
-        "NettyPlays",
-        "Sqaishey",
-        "TheOrionSound",
-        "Seapeekay",
-        "Solidarity",
-        "fWhip",
-        "MythicalSausage",
-        "Shubble",
-        "Joey Graceffa",
-        "Dangthatsalongname",
-        "GeminiTay",
-        "FalseSymmetry",
-        "PearlescentMoon",
-        "ZombieCleo",
-        "Rendog",
-        "XisumaVoid",
-        "Cubfan135",
-        "TangoTek",
-        "ImpulseSV",
-        "ZedaphPlays",
-        "JoeHills",
-        "Keralis",
-        "Stressmonster",
-        "Hypnotizd",
-        "Welsknight",
-        "PythonGB",
-        "TinFoilChef",
-        "Mumbo",
-        "GrianTwo",
-        "GoodTimesWithScar",
-        "Pixlriffs",
-        "EyecraftMC",
-        "Shulkercraft",
-        "Avomance",
-        "BlockDown",
-        "Mysticat",
-        "Legundo",
-        "Wunba",
-        "Sandiction",
-        "Kolanii",
-        "MudFlaps",
-        "SilverTV",
-        "Couriway",
-        "Feinberg",
-        "KaizoMC",
-        "Nestorio",
-        "MinuteTech",
-        "Mapicc",
-        "RyanNotBrian",
-        "Pungence",
-        "Jeracraft",
-        "MagmaMusen",
-        "WadZee",
-        "SB737",
-        "TheMisterEpic",
-        "RianTheScion",
-        "EagleEye621",
-        "Mogswamp",
-        "ibxtoycat",
-        "PhoenixSC",
-        "SimplySarc",
-        "Docm77",
-        "Iskall85",
-        "XBcrafted",
-        "Beefy",
-        "Kingbdogz",
-        "MCSkinn",
-        "Rizzle",
-        "Toycat",
-        "KingoftheHill",
-        "CraftBattleDuty",
-        "MCYum",
-        "PwrDown",
-        "McMakistein",
-        "FedXGaming",
-        "OMGcraft",
-        "xisumavoid",
-        "Methodzz",
-        "Pixlriffs2",
-        "BlueNerd",
-        "TheNeoCubest",
-        "ForgeLogical",
-        "SilentWhisperer",
-        "JC Playz",
-        "Skippy6Gaming",
-        "Navynexus",
-        "EyecraftMC",
-        "Rays Works",
-        "LogicalGeekBoy",
-        "Disruptive Builds",
-        "JWhisp",
-        "NiclasBlocko",
-        "FwhipTwo",
-        "BlockFacts",
-        "McYum",
-        "ACookieGod",
-        "Knarfy",
-        "SkipTheTutorial",
-        "FundyLive","Dan Rhodes",
-         "Boosfer",
-        "PrinceZamLive",
-        "CallMeHaley",
-        "ParrotX2",
-        "Spoke",
-        "SpokeToo",
-        "Reddoons",
-        "Bubbo",
-        "Zaypixel",
-        "BlueBits",
-        "ItsMarloe",
-        "FedEx269",
-        "AustLive",
-        "BionicLive",
-        "ClownPierceLive",
-        "NotNicoLive",
-        "MiniMuka",
-        "Spifey",
-        "SpifeyToo",
-        "TapL",
-        "Fruitberries",
-        "IlluminaHD",
-        "DreamXD",
-        "ParkerGames",
-        "ExtraEmily",
-        "FeinbergMC",
-        "Kelawesome",
-        "Mrekk",
-        "Technoblade Never Dies",
-        "TimeDeo",
-        "IntelEdits",
-        "Refraction",
-        "Purplecliffe",
-        "MandJTV Plays",
-        "PokeMEN7",
-        "Patters",
-        "Austin John Plays",
-        "UnitedGamer",
-        "GameboyLuke",
-        "Bird Keeper Toby",
-        "HoopsandHipHop",
-        "DeepPocketMonster",
-        "PM7",
-        "AbdallahSmash",
-        "ProsafiaGaming",
-        "NintendoBlackCrisis",
-        "Austin Evans 2",
-        "TheRetroFuture",
-        "SpawnPoiint",
-        "Nintendo Life",
-        "SwitchForce",
-        "Chiefxd",
-        "NotVixios",
-        "Sharpness",
-        "Ryguyrocky",
-        "Logdotzip",
-        "UnspeakablePlays",
-        "Diddens Fans",
-        "Moose",
-        "Sharky",
-        "LittleLizard",
-        "TinyTurtle",
-        "DougDoug",
-        "Ludwig", 
-        "DonutTheDog"
-    ];
+const questions = [
+    "Does your YouTuber play Minecraft?",
+    "Does your YouTuber play Roblox?",
+    "Does your YouTuber show their face?",
+    "Does your YouTuber have over 1 million subscribers?",
+    "Is your YouTuber known for gaming?"
+];
 
-    const questions = [
-
-         
-        "Has your YouTuber ever met a president or prime minister?",
-        "Does your YouTuber show their face?",
-        "Is your YouTuber famous for Roblox?",
-        "Is your YouTuber famous for Minecraft?",
-        "Does your YouTuber have over 1 million subscribers?",
-        "Is your YouTuber a kid?",
-        "Does your YouTuber have a pet?",
-        "Does your YouTuber own a gaming PC?",
-        "Has your YouTuber ever dyed their hair?",
-        "Does your YouTuber have siblings?",
-        "Does your YouTuber make family-friendly content?",
-        "Does your YouTuber swear often?",
-        "Does your YouTuber have over 100 videos?",
-        "Does your YouTuber have over 1000 videos?",
-        "Does your YouTuber have over 1 billion views?",
-        "Does your YouTuber use a facecam?",
-        "Does your YouTuber wear a hoodie often?",
-        "Has your YouTuber ever done a face reveal?",
-        "Does your YouTuber hide their identity?",
-        "Does your YouTuber wear a mask?",
-        "Does your YouTuber use an animated character?",
-        "Does your YouTuber play Roblox regularly?",
-        "Does your YouTuber play Minecraft regularly?",
-        "Does your YouTuber play Among Us?",
-        "Does your YouTuber play sandbox games?",
-        "Does your YouTuber play survival games?",
-        "Is your YouTuber under 18 years old?",
-        "Is your YouTuber over 30 years old?",
-        "Does your YouTuber have blue hair?",
-        "Does your YouTuber have tattoos?",
-        "Does your YouTuber wear glasses regularly?",
-        "Does your YouTuber wear headphones in videos?",
-        "Does your YouTuber have a custom gaming room?",
-        "Does your YouTuber own a console?",
-        "Does your YouTuber play on PC?",
-        "Does your YouTuber play mobile games often?",
-        "Does your YouTuber upload more than once a week?",
-        "Does your YouTuber upload every month?",
-        "Has your YouTuber ever taken a long break?",
-        "Does your YouTuber have a second channel?",
-        "Does your YouTuber have a vlog channel?",
-        "Does your YouTuber have a shorts channel?",
-        "Does your YouTuber have over 5 million subscribers?",
-        "Does your YouTuber have over 25 million subscribers?",
-        "Does your YouTuber have over 75 million subscribers?",
-        "Has your YouTuber reached 100 million subscribers?",
-        "Is your YouTuber known for challenges?",
-        "Is your YouTuber known for pranks?",
-        "Is your YouTuber known for reactions?",
-        "Is your YouTuber known for tutorials?",
-        "Is your YouTuber known for reviews?",
-        "Does your YouTuber review products?",
-        "Does your YouTuber review games?",
-        "Does your YouTuber make skits?",
-        "Does your YouTuber make parody videos?",
-        "Does your YouTuber use special effects?",
-        "Does your YouTuber have an editor?",
-        "Does your YouTuber edit their own videos?",
-        "Does your YouTuber have a mascot?",
-        "Does your YouTuber have fan art?",
-        "Does your YouTuber have a fan nickname?",
-        "Does your YouTuber have a Discord server?",
-        "Does your YouTuber use Twitter often?",
-        "Does your YouTuber use Instagram often?",
-        "Does your YouTuber use TikTok?",
-        "Does your YouTuber have merchandise?",
-        "Does your YouTuber sell clothing?",
-        "Does your YouTuber sell toys?",
-        "Has your YouTuber appeared in a movie?",
-        "Has your YouTuber appeared in a TV show?",
-        "Has your YouTuber written a book?",
-        "Has your YouTuber won a YouTube award?",
-        "Has your YouTuber received a Play Button award?",
-        "Does your YouTuber own a pet dog?",
-        "Does your YouTuber own a pet cat?",
-        "Does your YouTuber own multiple pets?",
-        "Does your YouTuber feature pets in videos?",
-        "Does your YouTuber make family content?",
-        "Does your YouTuber appear with family members?",
-        "Does your YouTuber have children?",
-        "Does your YouTuber have siblings in videos?",
-        "Does your YouTuber collaborate with other creators?",
-        "Does your YouTuber belong to a creator group?",
-        "Does your YouTuber attend gaming events?",
-        "Has your YouTuber been to VidCon?",
-        "Does your YouTuber stream on Twitch?",
-        "Does your YouTuber stream on YouTube?",
-        "Does your YouTuber use a webcam in every video?",
-        "Does your YouTuber use an avatar?",
-        "Does your YouTuber use a VTuber model?",
-        "Does your YouTuber hide their real name?",
-        "Does your YouTuber reveal personal information often?",
-        "Does your YouTuber do Q&A videos?",
-        "Does your YouTuber answer fan questions?",
-        "Does your YouTuber play with subscribers?",
-        "Does your YouTuber have a green logo?",
-        "Does your YouTuber have a red logo?",
-        "Does your YouTuber have a blue logo?",
-        "Has your YouTuber ever changed their channel name?",
-        "Has your YouTuber ever deleted videos?",
-        "Does your YouTuber play Roblox BedWars?",
-        "Does your YouTuber play Roblox Adopt Me?",
-        "Does your YouTuber play Roblox Brookhaven?",
-        "Does your YouTuber play Roblox Doors?",
-        "Does your YouTuber play Roblox Blox Fruits?",
-        "Does your YouTuber play Minecraft Hardcore?",
-        "Does your YouTuber play Minecraft Survival?",
-        "Does your YouTuber play Minecraft Creative?",
-        "Does your YouTuber build giant projects?",
-        "Does your YouTuber use mods frequently?",
-        "Does your YouTuber use shaders?",
-        "Does your YouTuber have a famous skin?",
-        "Does your YouTuber have a mascot character?",
-        "Does your YouTuber wear a costume?",
-        "Does your YouTuber use a voice changer?",
-        "Does your YouTuber have a deep voice?",
-        "Does your YouTuber have a high-pitched voice?",
-        "Does your YouTuber laugh often?",
-        "Does your YouTuber scream during videos?",
-        "Does your YouTuber rage at games?",
-        "Does your YouTuber play horror games regularly?",
-        "Does your YouTuber make challenge videos every week?",
-        "Does your YouTuber have over 500 videos?",
-        "Does your YouTuber have over 5,000 videos?",
-        "Has your YouTuber reached 10 billion views?",
-        "Has your YouTuber reached 20 billion views?",
-        "Does your YouTuber own a custom keyboard?",
-        "Does your YouTuber own multiple gaming setups?",
-        "Does your YouTuber make setup tours?",
-        "Does your YouTuber have LED lights in videos?",
-        "Does your YouTuber use a green screen?",
-        "Does your YouTuber have a recording studio?",
-        "Does your YouTuber use professional cameras?",
-        "Does your YouTuber make cinematic videos?",
-        "Does your YouTuber make documentaries?",
-        "Does your YouTuber interview people?",
-        "Does your YouTuber make podcasts?",
-        "Does your YouTuber have guests often?",
-        "Does your YouTuber feature subscribers in videos?",
-        "Does your YouTuber have fan meetups?",
-        "Has your YouTuber attended conventions?",
-        "Does your YouTuber travel for content?",
-        "Does your YouTuber visit theme parks?",
-        "Does your YouTuber visit restaurants on camera?",
-        "Does your YouTuber own a drone?",
-        "Does your YouTuber film outdoors often?",
-        "Does your YouTuber wear costumes?",
-        "Does your YouTuber collect action figures?",
-        "Does your YouTuber collect trading cards?",
-        "Does your YouTuber own a gaming company?",
-        "Does your YouTuber make behind-the-scenes videos?",
-        "Does your YouTuber make blooper videos?",
-        "Does your YouTuber do room tours?",
-        "Does your YouTuber do house tours?",
-        "Does your YouTuber own a farm?",
-        "Does your YouTuber live in Europe?",
-        "Does your YouTuber live in Australia?",
-        "Does your YouTuber speak more than one language?",
-        "Does your YouTuber review food?",
-        "Does your YouTuber review toys?",
-        "Does your YouTuber review technology?",
-        "Does your YouTuber review gadgets?",
-        "Does your YouTuber review games?",
-        "Does your YouTuber collect things?",
-        "Does your YouTuber own rare items?",
-        "Does your YouTuber make mystery box videos?",
-        "Does your YouTuber buy unusual products?",
-        "Does your YouTuber prank friends?",
-        "Does your YouTuber prank family?",
-        "Does your YouTuber prank strangers?",
-        "Does your YouTuber make social experiments?",
-        "Does your YouTuber help people?",
-        "Does your YouTuber donate money?",
-        "Does your YouTuber give away cars?",
-        "Does your YouTuber give away electronics?",
-        "Does your YouTuber give away gaming consoles?",
-        "Does your YouTuber have a world record?",
-        "Has your YouTuber broken a record?",
-        "Does your YouTuber compete in tournaments?",
-        "Does your YouTuber play competitively?",
-        "Does your YouTuber play casually?",
-        "Does your YouTuber speedrun games?",
-        "Does your YouTuber make tutorials?",
-        "Does your YouTuber teach skills?",
-        "Does your YouTuber make DIY content?",
-        "Does your YouTuber build things?",
-        "Does your YouTuber invent things?",
-        "Does your YouTuber code on camera?",
-        "Does your YouTuber make websites?",
-        "Does your YouTuber create games?",
-        "Does your YouTuber draw artwork?",
-        "Does your YouTuber animate cartoons?",
-        "Does your YouTuber own a mansion?",
-        "Does your YouTuber own a private jet?",
-        "Does your YouTuber own a boat?",
-        "Does your YouTuber own a motorcycle?",
-        "Does your YouTuber have a swimming pool?",
-        "Does your YouTuber have a gaming chair?",
-        "Does your YouTuber have RGB lights?",
-        "Does your YouTuber use a microphone?",
-        "Does your YouTuber use a webcam?",
-        "Does your YouTuber use multiple monitors?",
-        "Does your YouTuber wear headphones?",
-        "Does your YouTuber have a favorite game?",
-        "Does your YouTuber play Roblox every week?",
-        "Does your YouTuber play Minecraft every week?",
-        "Does your YouTuber upload challenge videos?",
-        "Does your YouTuber upload reaction videos?",
-        "Is your youtuber dead?",
-        "Does your YouTuber upload comedy videos?",
-        "Does your YouTuber upload educational videos?",
-        "Does your YouTuber upload animation videos?",
-        "Does your YouTuber upload roleplay videos?",
-        "Does your YouTuber have over 500,000 subscribers?",
-        "Does your YouTuber have over 2 million subscribers?",
-        "Does your YouTuber have over 15 million subscribers?",
-        "Does your YouTuber have over 30 million subscribers?",
-        "Does your YouTuber have over 70 million subscribers?",
-        "Does your YouTuber have over 100 million subscribers?",
-        "Has your YouTuber ever been trending?",
-        "Has your YouTuber ever won a trophy?",
-        "Has your YouTuber ever met a celebrity?",
-        "Has your YouTuber ever appeared in a commercial?",
-        "Does your YouTuber make content with friends?",
-        "Does your YouTuber make content with family?",
-        "Does your YouTuber have a gaming mouse?",
-        "Does your YouTuber know Diddens Fans?",
-        "Does your YouTuber have a gaming keyboard?",
-        "Does your YouTuber own a PlayStation?",
-        "Does your YouTuber own an Xbox?",
-        "Does your YouTuber own a Nintendo Switch?",
-        "Does your YouTuber play Roblox Doors?",
-        "Does your YouTuber play Roblox Piggy?",
-        "Does your YouTuber play Roblox Jailbreak?",
-        "Does your YouTuber play Roblox Arsenal?",
-        "Does your YouTuber play Roblox Tower of Hell?",
-        "Does your YouTuber play BedWars?",
-        "Does your YouTuber play Fortnite Creative?",
-        "Does your YouTuber play Call of Duty?",
-        "Does your YouTuber play GTA?",
-        "Does your YouTuber play Rocket League?",
-        "Does your YouTuber play FIFA?",
-        "Does your YouTuber play NBA 2K?",
-        "Does your YouTuber play Valorant?",
-        "Does your YouTuber play Counter-Strike?",
-        "Does your YouTuber play League of Legends?",
-        "Does your YouTuber play Pokemon games?",
-        "Does your YouTuber like anime?",
-        "Does your YouTuber watch movies?",
-        "Does your YouTuber make movie reviews?",
-        "Does your YouTuber make gaming tutorials?",
-        "Does your YouTuber make beginner guides?",
-        "Does your YouTuber make advanced guides?",
-        "Does your YouTuber make countdown videos?",
-        "Does your YouTuber make challenge compilations?",
-        "Does your YouTuber have a famous laugh?",
-        "Does your YouTuber have a famous scream?",
-        "Does your YouTuber wear the same outfit often?",
-        "Does your YouTuber have a recognizable hairstyle?",
-        "Does your YouTuber have a beard?",
-        "Does your YouTuber have long hair?",
-        "Does your YouTuber have short hair?",
-        "Does your YouTuber wear glasses?",
-        "Does your YouTuber wear sunglasses?",
-        "Does your YouTuber wear a cap?",
-        "Does your YouTuber wear a hoodie?",
-        "Does your YouTuber use special effects?",
-        "Does your YouTuber use editing tricks?",
-        "Does your YouTuber make cinematic videos?",
-        "Does your YouTuber have drone footage?",
-        "Does your YouTuber own expensive cameras?",
-        "Does your YouTuber have a recording studio?",
-        "Does your YouTuber have a gaming room?",
-        "Does your YouTuber have LED lights?",
-        "Does your YouTuber own a business?",
-        "Does your YouTuber own multiple businesses?",
-        "Does your YouTuber sell merchandise?",
-        "Does your YouTuber sell toys?",
-        "Does your YouTuber sell clothing?",
-        "Does your YouTuber have a mobile app?",
-        "Does your YouTuber have a website?",
-        "Does your YouTuber have a podcast?",
-        "Does your YouTuber interview people?",
-        "Does your YouTuber have guests on videos?",
-        "Does your YouTuber have fan meetups?",
-        "Does your YouTuber attend conventions?",
-        "Does your YouTuber attend VidCon?",
-        "Does your YouTuber travel for content?",
-        "Does your YouTuber visit other countries?",
-        "Does your YouTuber make food challenges?",
-        "Does your YouTuber eat spicy food on camera?",
-        "Does your YouTuber do taste tests?",
-        "Does your YouTuber review restaurants?",
-        "Does your YouTuber own pets?",
-        "Does your YouTuber have a dog?",
-        "Does your YouTuber have a cat?",
-        "Does your YouTuber feature pets often?",
-        "Does your YouTuber make holiday videos?",
-        "Does your YouTuber celebrate Halloween in videos?",
-        "Does your YouTuber celebrate Christmas in videos?",
-        "Does your YouTuber make New Year videos?",
-        "Does your YouTuber answer fan questions?",
-        "Does your YouTuber read comments?",
-        "Does your YouTuber have a Discord server?",
-        "Does your YouTuber have moderators?",
-        "Would kids know this YouTuber?",
-        "Would teenagers know this YouTuber?",
-        "Would gamers know this YouTuber?",
-        "Would your parents know this YouTuber?",
-        "Would your grandparents know this YouTuber?",
-        "Does your YouTuber play single-player games?",
-        "Does your YouTuber make scary content?",
-        "Does your YouTuber make funny content?",
-        "Does your YouTuber make serious content?",
-        "Does your YouTuber have a custom logo?",
-        "Does your YouTuber have a custom intro?",
-        "Does your YouTuber have a custom outro?",
-        "Does your YouTuber have a famous quote?",
-        "Does your YouTuber host events?",
-        "Does your YouTuber do live streams?",
-        "Does your YouTuber answer fan mail?",
-        "Does your YouTuber read comments?",
-        "Does your YouTuber have moderators?",
-        "Does your YouTuber have a blue check mark?",
-        "Would your parents know this YouTuber?",
-        "Would your teacher know this YouTuber?",
-        "Does your YouTuber sing?",
-        "Does your YouTuber rap?",
-        "Does your YouTuber play instruments?",
-        "Does your YouTuber dance?",
-        "Does your YouTuber perform live?",
-        "Does your YouTuber have a movie cameo?",
-        "Does your YouTuber have action figures?",
-        "Does your YouTuber have a board game?",
-        "Does your YouTuber have a mobile app?",
-        "Does your YouTuber have a video game?",
-        "Does your YouTuber have a website?",
-        "Does your YouTuber own a company?",
-        "Does your YouTuber employ staff?",
-        "Does your YouTuber have a manager?",
-        "Would your grandparents know who this YouTuber is?",
-        "Would your friends know who this YouTuber is?",
-        "Is your YouTuber one of the most famous on YouTube?",
-        "Does your YouTuber host contests?",
-        "Does your YouTuber give away prizes?",
-        "Does your YouTuber do charity events?",
-        "Has your YouTuber raised money for charity?",
-        "Does your YouTuber travel internationally?",
-        "Does your YouTuber make travel vlogs?",
-        "Does your YouTuber make food reviews?",
-        "Does your YouTuber cook on camera?",
-        "Does your YouTuber make challenge food videos?",
-        "Does your YouTuber play retro games?",
-        "Does your YouTuber play indie games?",
-        "Does your YouTuber play multiplayer games?",
-        "Does your YouTuber play single-player games?",
-        "Does your YouTuber speedrun games?",
-        "Does your YouTuber make walkthroughs?",
-        "Does your YouTuber make let's plays?",
-        "Does your YouTuber play scary games?",
-        "Does your YouTuber play Roblox obbies?",
-        "Does your YouTuber build in Minecraft?",
-        "Does your YouTuber survive in Minecraft?",
-        "Does your YouTuber play creative mode often?",
-        "Does your YouTuber use mods?",
-        "Does your YouTuber play with friends regularly?",
-        "Does your YouTuber laugh loudly?",
-        "Does your YouTuber have a famous catchphrase?",
-        "Does your YouTuber start videos the same way?",
-        "Does your YouTuber end videos the same way?",
-        "Would a child recognize your YouTuber instantly?",
-        "Would a gamer recognize your YouTuber instantly?",
-        "Has your YouTuber been famous for over 10 years?",
-        "Does your YouTuber still upload today?",
-        "Does your YouTuber play racing games?",
-        "Does your YouTuber play sports games?",
-        "Does your YouTuber play horror games?",
-        "Does your YouTuber make comedy videos?",
-        "Does your YouTuber make educational videos?",
-        "Does your YouTuber make ranking videos?",
-        "Does your YouTuber make tier lists?",
-        "Does your YouTuber make top 10 videos?",
-        "Does your YouTuber make animation videos?",
-        "Does your YouTuber make music videos?",
-        "Has your YouTuber released a song?",
-        "Does your YouTuber have a catchphrase?",
-        "Does your YouTuber have a famous intro?",
-        "Does your YouTuber have a logo fans recognize?",
-        "Has your YouTuber won an award?",
-        "Has your YouTuber appeared on television?",
-        "Does your YouTuber own a business?",
-        "Does your YouTuber own a sports car?",
-        "Does your YouTuber have a famous pet?",
-        "Does your YouTuber make food content?",
-        "Does your YouTuber do taste tests?",
-        "Does your YouTuber travel often?",
-        "Has your YouTuber visited another country on camera?",
-        "Does your YouTuber collaborate with friends often?",
-        "Is your YouTuber part of a group?",
-        "Does your YouTuber livestream?",
-        "Does your YouTuber upload every day?",
-        "Does your YouTuber upload every week?",
-        "Would most people recognize your YouTuber's name?",
-        "Does your YouTuber have a verified checkmark?",
-        "Has your YouTuber ever met another famous YouTuber?",
-        "Does your youtuber cuss alot?",
-        "Does your YouTuber make challenge videos?",
-        "Is your YouTuber from the United States?",
-        "Does your YouTuber upload every week?",
-        "Does your YouTuber stream live?",
-        "Is your YouTuber known by kids?"
-
-    ];
-function startGame(){
-
+function startGame() {
     document.getElementById("homePage").style.display = "none";
     document.getElementById("gamePage").style.display = "flex";
 
-    currentQuestion = -1;
+    currentQuestion = 0;
+    confidence = 0;
+    skippedQuestions = [];
 
     document.getElementById("question").textContent =
-    "ARE YOU READY TO PLAY GUESS THE YOUTUBER!?";
-
+        "Are you ready to play Captain Clue?";
 }
 
-    function answer(type){
-
-    if(currentQuestion === -1){
-        nextQuestion();
-        return;
-    }
-
-    if(type === "yes") confidence += 20;
-    if(type === "probably") confidence += 15;
-    if(type === "probablynot") confidence += 8;
-    if(type === "dk") confidence += 3;
+function answer(type) {
+    if (type === "yes") confidence += 20;
+    if (type === "probably") confidence += 15;
+    if (type === "probablynot") confidence += 8;
+    if (type === "dk") confidence += 3;
 
     nextQuestion();
-
 }
 
-
-function nextQuestion(){
-
-    if(currentQuestion === -1){
-        currentQuestion = 0;
-        document.getElementById("question").textContent =
-        questions[0];
-        return;
-    }
-
-    if(confidence >= 200){
+function nextQuestion() {
+    if (confidence >= 80) {
         makeGuess();
         return;
     }
 
     currentQuestion++;
 
-    if(currentQuestion < questions.length){
-
+    if (currentQuestion < questions.length) {
         document.getElementById("question").textContent =
-        questions[currentQuestion];
-
-    }else{
-
-        makeGuess();
-
-    }
-
-}
-
-
-    function makeGuess(){
-
-        document.getElementById("answerButtons").style.display = "none";
-
-        let guess =
-        youtubers[Math.floor(Math.random()*youtubers.length)];
-
-        document.getElementById("question").innerHTML =
-
-        "🏴‍☠️ Arrr! Are you thinking of <b>" +
-        guess +
-        "</b>?<br><br>" +
-
-        '<button class="yesBtn" onclick="correctGuess()">✅ Correct</button>' +
-
-        '<button class="noBtn" onclick="wrongGuess()">❌ Wrong</button>';
-
-
-    }
-
-   
-
-function correctGuess(){
-
-    document.getElementById("question").innerHTML =
-
-        "🎉🏴‍☠️ Arrr! I guessed correctly!<br><br>" +
-
-        '<button class="utilityBtn" onclick="restartGame()">Play Again</button>';
-
-}
-
-function wrongGuess(){
-
-    document.getElementById("question").innerHTML =
-
-        "🤔 Should I continue asking questions?<br><br>" +
-
-        '<button class="yesBtn" onclick="continueGame()">Yes</button>' +
-
-        '<button class="noBtn" onclick="showWinner()">No</button>';
-
-}
-
-    function continueGame(){
-
-        document.getElementById("answerButtons").style.display = "block";
-
-        confidence = 0;
-
-        if(skippedQuestions.length > 0){
-
-            document.getElementById("question").textContent =
-            skippedQuestions.shift();
-
-        }else{
-
-            nextQuestion();
-
-        }
-
-
-    }
-
-    function showWinner(){
-
-
-        document.getElementById("gamePage").style.display = "none";
-        document.getElementById("winnerPage").style.display = "flex";
-
-
-    }
-
-    function saveNewYoutuber(){
-
-
-        let newName =
-        document.getElementById("newYoutuber").value;
-
-        if(newName !== ""){
-
-            youtubers.push(newName);
-
-            localStorage.setItem(
-                "captainClueYoutubers",
-                JSON.stringify(youtubers)
-                );
-
-            document.getElementById("winnerPage").innerHTML =
-
-            '<div class="container">' +
-
-            '<h2>🏆 Bravo! You won!</h2>' +
-
-            '<p>Thanks for teaching Captain Clue a new YouTuber!</p>' +
-
-            '<button onclick="restartGame()">Play Again</button>' +
-
-            '</div>';
-
-        }
-
-
-    }
-
-
-
-    function goBack(){
-
-
-
-        if(currentQuestion > 0){
-
-            currentQuestion--;
-
-            document.getElementById("question").textContent =
             questions[currentQuestion];
-
-            document.getElementById("answerButtons").style.display = "block";
-
-        }
-
-
+    } else {
+        makeGuess();
     }
+}
 
-    function skipQuestion(){
+function makeGuess() {
+    document.getElementById("answerButtons").style.display = "none";
 
+    let guess = youtubers[Math.floor(Math.random() * youtubers.length)];
 
-        skippedQuestions.push(
-            questions[currentQuestion]
-            );
+    document.getElementById("question").innerHTML =
+        "🏴‍☠️ Arrr! Are you thinking of <b>" + guess + "</b>?<br><br>" +
+        '<button class="yesBtn" onclick="correctGuess()">✅ Correct</button>' +
+        '<button class="noBtn" onclick="wrongGuess()">❌ Wrong</button>' +
+        '<button class="utilityBtn" onclick="restartGame()">🔄 Restart</button>';
+}
 
+function correctGuess() {
+    document.getElementById("question").innerHTML =
+        "🎉 I guessed correctly!<br><br>" +
+        '<button onclick="restartGame()">Play Again</button>';
+}
+
+function wrongGuess() {
+    document.getElementById("question").innerHTML =
+        "🤔 Should I continue?<br><br>" +
+        '<button class="yesBtn" onclick="continueGame()">Yes</button>' +
+        '<button class="noBtn" onclick="showWinner()">No</button>';
+}
+
+function continueGame() {
+    document.getElementById("answerButtons").style.display = "block";
+    confidence = 0;
+
+    if (skippedQuestions.length > 0) {
+        document.getElementById("question").textContent =
+            skippedQuestions.shift();
+    } else {
         nextQuestion();
-
-
     }
+}
 
-    function restartGame(){
+function showWinner() {
+    document.getElementById("gamePage").style.display = "none";
+    document.getElementById("winnerPage").style.display = "flex";
+}
 
+function saveNewYoutuber() {
+    let newName = document.getElementById("newYoutuber").value;
 
-        location.reload();
+    if (newName !== "") {
+        youtubers.push(newName);
+        localStorage.setItem("captainClueYoutubers", JSON.stringify(youtubers));
 
-
+        document.getElementById("winnerPage").innerHTML =
+            "<div class='container'>" +
+            "<h2>🏆 Thanks! New YouTuber saved!</h2>" +
+            "<button onclick='restartGame()'>Play Again</button>" +
+            "</div>";
     }
+}
 
-    window.onload = function(){
+function goBack() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        document.getElementById("question").textContent =
+            questions[currentQuestion];
+    }
+}
 
+function skipQuestion() {
+    skippedQuestions.push(questions[currentQuestion]);
+    nextQuestion();
+}
 
-        let saved =
-        localStorage.getItem(
-            "captainClueYoutubers"
-            );
+function restartGame() {
+    location.reload();
+}
 
-        if(saved){
+window.onload = function () {
+    let saved = localStorage.getItem("captainClueYoutubers");
+    if (saved) {
+        youtubers = JSON.parse(saved);
+    }
+};
 
-            youtubers = JSON.parse(saved);
-
-        }
-
-
-    };
 </script>
 
 </body>
