@@ -92,10 +92,8 @@
 
 <body>
 
-<!-- 💬 FEEDBACK BUTTON -->
 <button id="feedbackBtn" onclick="openFeedback()">💬 Feedback</button>
 
-<!-- 🏠 HOME PAGE -->
 <div id="homePage">
     <div class="container">
 
@@ -103,7 +101,6 @@
 
         <h1>Captain Clue</h1>
 
-        <!-- 🏴‍☠️ PIRATE IMAGE ADDED HERE -->
         <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
 
         <p>Think of a YouTuber and I will guess it!</p>
@@ -113,11 +110,9 @@
     </div>
 </div>
 
-<!-- 🎮 GAME PAGE -->
 <div id="gamePage">
     <div class="container">
 
-        <!-- 🏴‍☠️ PIRATE IMAGE ALSO ON GAME PAGE -->
         <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
 
         <div id="question">Loading...</div>
@@ -139,7 +134,6 @@
     </div>
 </div>
 
-<!-- 🏆 WINNER PAGE -->
 <div id="winnerPage">
     <div class="container">
 
@@ -164,195 +158,103 @@ let currentQuestion = 0;
 let confidence = 0;
 
 let youtubers = [
- "MrBeast",
- "DanTDM",
- "Preston",
- "Unspeakable",
-"Flamingo",
-"ThinkNoodles",
- "PewDiePie",
- "Markiplier",
-"Jacksepticeye",
-"Airrack",
-"Ryan Trahan",
-"Karl Jacobs",
-"GeorgeNotFound",
-"Sapnap",
-"BadBoyHalo",
-"Skeppy",
-"TommyInnit",
-"Tubbo",
-"Ranboo",
-"Wilbur Soot",
-"Philza",
-"Mumbo Jumbo",
-"Grian",
-"GoodTimesWithScar",
-"GeminiTay",
-"SmallishBeans",
-"SolidarityGaming",
-"fWhip",
-"MythicalSausage",
-"Forge Labs",
-"Luke TheNotable",
-"Wattles",
-"Pixlriffs",
-"Shulkercraft",
-"EyecraftMC",
-"PhoenixSC",
-"SkipTheTutorial",
-"Knarfy",
-"ACookieGod",
-"Camman18",
-"ClownPierce",
-"Parrot",
-"Reddoons",
-"Spoke",
-"Boosfer",
-"Bionic",
-"NotNico",
-"PrinceZam",
-"Minibloxia",
-"DV Plays",
-"KonekoKitten",
-"RussoPlays",
-"Hyper",
-"Laughability",
-"Tanker",
-"Bandites",
-"NapkinNate",
-"Napkinnate Games",
-"Remainings",
-"Tofuu",
-"Temprist",
-"GreenLegocats123",
-"Denis",
-"Sketch",
-"Corl",
-"Sub",
-"Jelly",
-"Slogo",
-"Crainer",
-"Caylus",
-"Infinite",
-"Unspeakable Gaming",
-"MooseCraft",
-"Shark",
-"Little Kelly",
-"Little Carly",
-"Little Lizard Gaming",
-"Tiny Turtle",
-"BeckBroJack",
-"PrestonPlayz",
-"BriannaPlayz",
-"ZHC",
-"Ben Azelart",
-"Matthew Beem",
-"FaZe Rug",
-"Nick DiGiovanni",
-"Mark Rober",
-"MKBHD",
-"iJustine",
-"Mrwhosetheboss",
-"Linus Tech Tips",
-"The Hacksmith",
-"How Ridiculous",
-"Dude Perfect",
-"MatPat",
-"Game Theory",
-"Film Theory",
-"Food Theory",
-"Jaiden Animations",
-"TheOdd1sOut",
-"Domics",
-"Let Me Explain Studios",
-"SMii7Y",
-"VanossGaming",
-"H20 Delirious",
-"Moo Snuckel",
-"Terroriser"
-"Dream",
-"Technoblade",
-"Ludwig",
-"Moose",
-"Sharky",
-"LittleLizard", 
-"TinyTurtle",
-"UnspeakablePlays",
-"Diddens Fans"
+    "MrBeast", "DanTDM", "Preston", "Unspeakable", "Flamingo", "ThinkNoodles",
+    "PewDiePie", "Markiplier", "Jacksepticeye", "Airrack", "Ryan Trahan",
+    "Karl Jacobs", "GeorgeNotFound", "Sapnap", "BadBoyHalo", "Skeppy",
+    "TommyInnit", "Tubbo", "Ranboo", "Wilbur Soot", "Philza", "Mumbo Jumbo",
+    "Grian", "GoodTimesWithScar", "GeminiTay", "SmallishBeans", "SolidarityGaming",
+    "fWhip", "MythicalSausage", "Forge Labs", "Luke TheNotable", "Wattles",
+    "Pixlriffs", "Shulkercraft", "EyecraftMC", "PhoenixSC", "SkipTheTutorial",
+    "Knarfy", "ACookieGod", "Camman18", "ClownPierce", "Parrot", "Reddoons",
+    "Spoke", "Boosfer", "Bionic", "NotNico", "PrinceZam", "Minibloxia",
+    "DV Plays", "KonekoKitten", "RussoPlays", "Hyper", "Laughability",
+    "Tanker", "Bandites", "NapkinNate", "Napkinnate Games", "Remainings",
+    "Tofuu", "Temprist", "GreenLegocats123", "Denis", "Sketch", "Corl",
+    "Sub", "Jelly", "Slogo", "Crainer", "Caylus", "Infinite", "Unspeakable Gaming",
+    "MooseCraft", "Shark", "Little Kelly", "Little Carly", "Little Lizard Gaming",
+    "Tiny Turtle", "BeckBroJack", "PrestonPlayz", "BriannaPlayz", "ZHC",
+    "Ben Azelart", "Matthew Beem", "FaZe Rug", "Nick DiGiovanni", "Mark Rober",
+    "MKBHD", "iJustine", "Mrwhosetheboss", "Linus Tech Tips", "The Hacksmith",
+    "How Ridiculous", "Dude Perfect", "MatPat", "Game Theory", "Film Theory",
+    "Food Theory", "Jaiden Animations", "TheOdd1sOut", "Domics", "Let Me Explain Studios",
+    "SMii7Y", "VanossGaming", "H20 Delirious", "Moo Snuckel", "Terroriser", // <-- Fixed missing comma here
+    "Dream", "Technoblade", "Ludwig", "Moose", "Sharky", "LittleLizard", 
+    "TinyTurtle", "UnspeakablePlays", "Diddens Fans"
+]; // <-- Fixed missing closing bracket and semicolon here
    
-const extraQuestions = [
-"Did your YouTuber become famous before 2020?",
-"Did your YouTuber become famous after 2020?",
-"Does your YouTuber have a verified channel?",
-"Has your YouTuber ever changed their profile picture?",
-"Doe,s your YouTuber usually upload in English?",
-"Does your YouTuber have an accent that fans recognize?",
-"Does your YouTuber use custom thumbnails?",
-"Does your YouTuber appear in every video?",
-"Does your YouTuber sometimes let friends take over videos?",
-"Does your YouTuber own more than one channel?",
-"Has your YouTuber ever built something huge?",
-"Has your YouTuber ever survived 100 days in a game?",
-"Has your YouTuber ever completed a challenge series?",
-"Has your YouTuber ever competed against friends?",
-"Has your YouTuber ever hidden clues in videos?",
-"Has your YouTuber ever done a giveaway?",
-"Has your YouTuber ever made a charity video?",
-"Has your YouTuber ever done a subscriber special?",
-"Has your YouTuber ever celebrated a milestone on camera?",
-"Has your YouTuber ever broken a world record?",
-"Does your YouTuber own custom merchandise?",
-"Does your YouTuber have their own brand?",
-"Does your YouTuber have a famous pet?",
-"Does your YouTuber often wear the same color?",
-"Does your YouTuber use a cartoon version of themselves?",
-"Does your YouTuber use a custom avatar?",
-"Does your YouTuber appear in animated videos?",
-"Does your YouTuber make content with siblings?",
-"Does your YouTuber make content with their spouse?",
-"Does your YouTuber make content with their parents?",
-"Does your YouTuber usually smile in thumbnails?",
-"Does your YouTuber make dramatic thumbnails?",
-"Does your YouTuber use arrows in thumbnails?",
-"Does your YouTuber use circles in thumbnails?",
-"Does your YouTuber play games competitively?",
-"Does your YouTuber play games casually?",
-"Does your YouTuber make challenge content?",
-"Does your YouTuber make experiment content?",
-"Does your YouTuber make educational content?",
-"Does your YouTuber make comedy content?",
-"Would elementary school students know this YouTuber?",
-"Would middle school students know this YouTuber?",
-"Would high school students know this YouTuber?",
-"Would college students know this YouTuber?",
-"Would gamers recognize this YouTuber?",
-"Would non-gamers recognize this YouTuber?",
-"Does your YouTuber have a famous catchphrase?",
-"Does your YouTuber have a signature laugh?",
-"Does your YouTuber have a recognizable logo?",
-"Does your YouTuber have a recognizable intro?",
-"Has your YouTuber ever visited another continent?",
-"Has your YouTuber ever filmed on a beach?",
-"Has your YouTuber ever filmed in the snow?",
-"Has your YouTuber ever filmed in a desert?",
-"Has your YouTuber ever filmed on a boat?",
-"Has your YouTuber ever filmed in an airplane?",
-"Has your YouTuber ever filmed at a theme park?",
-"Has your YouTuber ever filmed in a stadium?",
-"Has your YouTuber ever filmed at a convention?",
-"Has your YouTuber ever filmed in a hotel?",
-"Does your YouTuber own a custom PC?",
-"Does your YouTuber own multiple monitors?",
-"Does your YouTuber use RGB lights?",
-"Does your YouTuber have a custom desk setup?",
-"Does your YouTuber have a gaming room?",
-"Does your YouTuber have a studio room?",
-"Does your YouTuber record with friends nearby?",
-"Does your YouTuber record alone?",
-"Does your YouTuber use a professional microphone?",
-"Does your YouTuber use a webcam regularly?"
+const questions = [ // <-- Changed from extraQuestions to questions to match game logic
+    "Did your YouTuber become famous before 2020?",
+    "Did your YouTuber become famous after 2020?",
+    "Does your YouTuber have a verified channel?",
+    "Has your YouTuber ever changed their profile picture?",
+    "Does your YouTuber usually upload in English?", // <-- Fixed typo 'Doe,s'
+    "Does your YouTuber have an accent that fans recognize?",
+    "Does your YouTuber use custom thumbnails?",
+    "Does your YouTuber appear in every video?",
+    "Does your YouTuber sometimes let friends take over videos?",
+    "Does your YouTuber own more than one channel?",
+    "Has your YouTuber ever built something huge?",
+    "Has your YouTuber ever survived 100 days in a game?",
+    "Has your YouTuber ever completed a challenge series?",
+    "Has your YouTuber ever competed against friends?",
+    "Has your YouTuber ever hidden clues in videos?",
+    "Has your YouTuber ever done a giveaway?",
+    "Has your YouTuber ever made a charity video?",
+    "Has your YouTuber ever done a subscriber special?",
+    "Has your YouTuber ever celebrated a milestone on camera?",
+    "Has your YouTuber ever broken a world record?",
+    "Does your YouTuber own custom merchandise?",
+    "Does your YouTuber have their own brand?",
+    "Does your YouTuber have a famous pet?",
+    "Does your YouTuber often wear the same color?",
+    "Does your YouTuber use a cartoon version of themselves?",
+    "Does your YouTuber use a custom avatar?",
+    "Does your YouTuber appear in animated videos?",
+    "Does your YouTuber make content with siblings?",
+    "Does your YouTuber make content with their spouse?",
+    "Does your YouTuber make content with their parents?",
+    "Does your YouTuber usually smile in thumbnails?",
+    "Does your YouTuber make dramatic thumbnails?",
+    "Does your YouTuber use arrows in thumbnails?",
+    "Does your YouTuber use circles in thumbnails?",
+    "Does your YouTuber play games competitively?",
+    "Does your YouTuber play games casually?",
+    "Does your YouTuber make challenge content?",
+    "Does your YouTuber make experiment content?",
+    "Does your YouTuber make educational content?",
+    "Does your YouTuber make comedy content?",
+    "Would elementary school students know this YouTuber?",
+    "Would middle school students know this YouTuber?",
+    "Would high school students know this YouTuber?",
+    "Would college students know this YouTuber?",
+    "Would gamers recognize this YouTuber?",
+    "Would non-gamers recognize this YouTuber?",
+    "Does your YouTuber have a famous catchphrase?",
+    "Does your YouTuber have a signature laugh?",
+    "Does your YouTuber have a recognizable logo?",
+    "Does your YouTuber have a recognizable intro?",
+    "Has your YouTuber ever visited another continent?",
+    "Has your YouTuber ever filmed on a beach?",
+    "Has your YouTuber ever filmed in the snow?",
+    "Has your YouTuber ever filmed in a desert?",
+    "Has your YouTuber ever filmed on a boat?",
+    "Has your YouTuber ever filmed in an airplane?",
+    "Has your YouTuber ever filmed at a theme park?",
+    "Has your YouTuber ever filmed in a stadium?",
+    "Has your YouTuber ever filmed at a convention?",
+    "Has your YouTuber ever filmed in a hotel?",
+    "Does your YouTuber own a custom PC?",
+    "Does your YouTuber own multiple monitors?",
+    "Does your YouTuber use RGB lights?",
+    "Does your YouTuber have a custom desk setup?",
+    "Does your YouTuber have a gaming room?",
+    "Does your YouTuber have a studio room?",
+    "Does your YouTuber record with friends nearby?",
+    "Does your YouTuber record alone?",
+    "Does your YouTuber use a professional microphone?",
+    "Does your YouTuber use a webcam regularly?"
 ];
+
 /* 🎮 GAME FUNCTIONS */
 
 function startGame() {
@@ -362,8 +264,7 @@ function startGame() {
     document.getElementById("homePage").style.display = "none";
     document.getElementById("gamePage").style.display = "flex";
 
-    document.getElementById("question").textContent =
-        questions[currentQuestion];
+    document.getElementById("question").textContent = questions[currentQuestion];
 }
 
 function answer(type) {
@@ -383,8 +284,7 @@ function nextQuestion() {
         return;
     }
 
-    document.getElementById("question").textContent =
-        questions[currentQuestion];
+    document.getElementById("question").textContent = questions[currentQuestion];
 }
 
 function makeGuess() {
@@ -392,8 +292,20 @@ function makeGuess() {
 
     document.getElementById("question").innerHTML =
         "🏴‍☠️ Are you thinking of <b>" + guess + "</b>?<br><br>" +
-        '<button class="yesBtn" onclick="restartGame()">Yes</button>' +
-        '<button class="noBtn" onclick="restartGame()">No</button>';
+        '<button class="yesBtn" onclick="handleGuessResult(true)">Yes</button>' +
+        '<button class="noBtn" onclick="handleGuessResult(false)">No</button>';
+}
+
+// Fixed logic for win/lose screens
+function handleGuessResult(isCorrect) {
+    if (isCorrect) {
+        alert("The Captain wins again! Huzzah! 🏴‍☠️");
+        restartGame();
+    } else {
+        // If the AI guessed wrong, show the Winner page so user can teach the AI
+        document.getElementById("gamePage").style.display = "none";
+        document.getElementById("winnerPage").style.display = "flex";
+    }
 }
 
 /* 🔧 UTILITIES */
@@ -401,13 +313,11 @@ function makeGuess() {
 function goBack() {
     if (currentQuestion > 0) {
         currentQuestion--;
-        document.getElementById("question").textContent =
-            questions[currentQuestion];
+        document.getElementById("question").textContent = questions[currentQuestion];
     }
 }
 
 function skipQuestion() {
-    currentQuestion++;
     nextQuestion();
 }
 
@@ -420,7 +330,7 @@ function saveNewYoutuber() {
 
     if (name !== "") {
         youtubers.push(name);
-        alert("Saved!");
+        alert("Saved " + name + " to the roster!");
         restartGame();
     }
 }
