@@ -94,26 +94,33 @@
 
 <button id="feedbackBtn" onclick="openFeedback()">💬 Feedback</button>
 
+<!-- 🏠 HOME PAGE -->
 <div id="homePage">
     <div class="container">
 
         <div class="flag">🏴‍☠️</div>
 
+        <!-- 🌐 LANGUAGE BUTTON -->
+        <button id="langBtn" onclick="switchLanguage()" style="background: white; border: 1px solid black; font-weight: bold;">🌐 Language: English</button>
+
         <h1>Captain Clue</h1>
 
         <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
 
-        <p>Think of a YouTuber and I will guess it!</p>
+        <p id="homeSubtext">Think of a YouTuber and I will guess it!</p>
 
-        <button onclick="startGame()">Start Game</button>
+        <!-- Added id="startBtn" so we can change its language dynamically -->
+        <button id="startBtn" onclick="startGame()">Start Game</button>
 
     </div>
 </div>
 
+<!-- 🎮 GAME PAGE -->
 <div id="gamePage">
     <div class="container">
 
-        <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
+        <!-- Added id="guessImage" to dynamically swap the pirate out for a YouTuber face -->
+        <img id="guessImage" src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
 
         <div id="question">Loading...</div>
 
@@ -134,6 +141,7 @@
     </div>
 </div>
 
+<!-- 🏆 WINNER PAGE -->
 <div id="winnerPage">
     <div class="container">
 
@@ -156,6 +164,7 @@ function openFeedback() {
 /* 🎮 GAME DATA */
 let currentQuestion = 0;
 let confidence = 0;
+let currentLang = "en"; // Keeps track of language toggle
 
 let youtubers = [
     "MrBeast", "DanTDM", "Preston", "Unspeakable", "Flamingo", "ThinkNoodles",
@@ -177,17 +186,18 @@ let youtubers = [
     "MKBHD", "iJustine", "Mrwhosetheboss", "Linus Tech Tips", "The Hacksmith",
     "How Ridiculous", "Dude Perfect", "MatPat", "Game Theory", "Film Theory",
     "Food Theory", "Jaiden Animations", "TheOdd1sOut", "Domics", "Let Me Explain Studios",
-    "SMii7Y", "VanossGaming", "H20 Delirious", "Moo Snuckel", "Terroriser", // <-- Fixed missing comma here
+    "SMii7Y", "VanossGaming", "H20 Delirious", "Moo Snuckel", "Terroriser",
     "Dream", "Technoblade", "Ludwig", "Moose", "Sharky", "LittleLizard", 
     "TinyTurtle", "UnspeakablePlays", "Diddens Fans"
-]; // <-- Fixed missing closing bracket and semicolon here
+];
    
-const questions = [ // <-- Changed from extraQuestions to questions to match game logic
+// 🇬🇧 ENGLISH LIST
+const questionsEN = [
     "Did your YouTuber become famous before 2020?",
     "Did your YouTuber become famous after 2020?",
     "Does your YouTuber have a verified channel?",
     "Has your YouTuber ever changed their profile picture?",
-    "Does your YouTuber usually upload in English?", // <-- Fixed typo 'Doe,s'
+    "Does your YouTuber usually upload in English?",
     "Does your YouTuber have an accent that fans recognize?",
     "Does your YouTuber use custom thumbnails?",
     "Does your YouTuber appear in every video?",
@@ -255,6 +265,23 @@ const questions = [ // <-- Changed from extraQuestions to questions to match gam
     "Does your YouTuber use a webcam regularly?"
 ];
 
+// 🇪🇸 SPANISH LIST (You can translate the rest of these later!)
+const questionsES = [
+    "¿Tu YouTuber se hizo famoso antes de 2020?",
+    "¿Tu YouTuber se hizo famoso después de 2020?",
+    "¿Tu YouTuber tiene un canal verificado?",
+    "¿Tu YouTuber ha cambiado alguna vez su foto de perfil?",
+    "¿Tu YouTuber suele subir vídeos en inglés?",
+    "¿Tu YouTuber tiene un acento que los fans reconocen?",
+    "¿Tu YouTuber utiliza miniaturas personalizadas?",
+    "¿Tu YouTuber aparece en cada vídeo?",
+    "¿A veces tu YouTuber deja que sus amigos graben en sus vídeos?",
+    "¿Tu YouTuber tiene más de un canal?"
+];
+
+// The default list starts out on the English array
+let questions = questionsEN; 
+
 /* 🎮 GAME FUNCTIONS */
 
 function startGame() {
@@ -263,6 +290,9 @@ function startGame() {
 
     document.getElementById("homePage").style.display = "none";
     document.getElementById("gamePage").style.display = "flex";
+
+    // Dynamic Reset: Ensure the image always returns back to the pirate when starting a brand new round
+    document.getElementById("guessImage").src = "pirate.png";
 
     document.getElementById("question").textContent = questions[currentQuestion];
 }
@@ -290,21 +320,52 @@ function nextQuestion() {
 function makeGuess() {
     let guess = youtubers[Math.floor(Math.random() * youtubers.length)];
 
-    document.getElementById("question").innerHTML =
-        "🏴‍☠️ Are you thinking of <b>" + guess + "</b>?<br><br>" +
-        '<button class="yesBtn" onclick="handleGuessResult(true)">Yes</button>' +
-        '<button class="noBtn" onclick="handleGuessResult(false)">No</button>';
+    // Dynamic Swap: Wipes whitespace and paths the src directly to the target YouTuber filename
+    let fileName = guess.replace(/\s+/g, '') + ".png";
+    document.getElementById("guessImage").src = fileName;
+
+    // Display the final guess sentence structure depending on global state language setup
+    if(currentLang === "en") {
+        document.getElementById("question").innerHTML =
+            "🏴‍☠️ Are you thinking of <b>" + guess + "</b>?<br><br>" +
+            '<button class="yesBtn" onclick="handleGuessResult(true)">Yes</button>' +
+            '<button class="noBtn" onclick="handleGuessResult(false)">No</button>';
+    } else {
+        document.getElementById("question").innerHTML =
+            "🏴‍☠️ ¿Estás pensando en <b>" + guess + "</b>?<br><br>" +
+            '<button class="yesBtn" onclick="handleGuessResult(true)">Sí</button>' +
+            '<button class="noBtn" onclick="handleGuessResult(false)">No</button>';
+    }
 }
 
-// Fixed logic for win/lose screens
 function handleGuessResult(isCorrect) {
     if (isCorrect) {
-        alert("The Captain wins again! Huzzah! 🏴‍☠️");
+        if(currentLang === "en") {
+            alert("The Captain wins again! Huzzah! 🏴‍☠️");
+        } else {
+            alert("¡El Capitán gana de nuevo! ¡Gozoso! 🏴‍☠️");
+        }
         restartGame();
     } else {
-        // If the AI guessed wrong, show the Winner page so user can teach the AI
         document.getElementById("gamePage").style.display = "none";
         document.getElementById("winnerPage").style.display = "flex";
+    }
+}
+
+/* 🌐 TRANSLATION SWAPPER */
+function switchLanguage() {
+    if (currentLang === "en") {
+        currentLang = "es";
+        questions = questionsES;
+        document.getElementById("langBtn").textContent = "🌐 Idioma: Español";
+        document.getElementById("startBtn").textContent = "Iniciar Juego 🏴‍☠️";
+        document.getElementById("homeSubtext").textContent = "¡Piensa en un YouTuber y lo adivinaré!";
+    } else {
+        currentLang = "en";
+        questions = questionsEN;
+        document.getElementById("langBtn").textContent = "🌐 Language: English";
+        document.getElementById("startBtn").textContent = "Start Game";
+        document.getElementById("homeSubtext").textContent = "Think of a YouTuber and I will guess it!";
     }
 }
 
