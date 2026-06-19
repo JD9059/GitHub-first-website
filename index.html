@@ -25,6 +25,17 @@
             background: white;
             z-index: 9999;
         }
+        #contactBtn{
+        position:fixed;
+        top:15px;
+        right:140px;
+        padding:10px 15px;
+        border:none;
+        border-radius:10px;
+        cursor:pointer;
+        background:white;
+        z-index:9999;
+    }
 
         /* 🏴‍☠️ PIRATE IMAGE */
         .pirate-img {
@@ -91,9 +102,20 @@
 </head>
 
 <body>
+    <select id="lang" onchange="setLang()" style="position:fixed;top:10px;left:10px;z-index:9999;">
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+    <option value="it">Italiano</option>
+    <option value="pt">Português</option>
+    <option value="ja">日本語</option>
+    <option value="ko">한국어</option>
+    </select>
 
-<button id="feedbackBtn" onclick="openFeedback()">💬 Feedback</button>
-
+    <button id="feedbackBtn" onclick="openFeedback()">💬 Feedback</button>
+    <button id="contactBtn" onclick="openContact()">📩 Contact Me</button>
+    
 <div id="homePage">
     <div class="container">
 
@@ -339,6 +361,22 @@ function saveNewYoutuber() {
 window.onload = function () {
     document.getElementById("homePage").style.display = "flex";
 };
+
+    function openContact(){
+    alert("Contact Me feature coming soon!");
+}
+
+function setLang(){
+    let lang = document.getElementById("lang").value;
+
+    if(lang==="es"){
+        document.querySelector("h1").textContent = "🏴‍☠️ Capitán Clue";
+    }else if(lang==="fr"){
+        document.querySelector("h1").textContent = "🏴‍☠️ Capitaine Clue";
+    }else{
+        document.querySelector("h1").textContent = "🏴‍☠️ Captain Clue";
+    }
+}
 
 </script>
 
