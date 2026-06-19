@@ -362,8 +362,15 @@ window.onload = function () {
     document.getElementById("homePage").style.display = "flex";
 };
 
-    function openContact(){
-    alert("Contact Me feature coming soon!");
+
+function openFeedback(){
+    document.getElementById("popup").style.display = "block";
+    document.getElementById("popupTitle").textContent = "Feedback";
+}
+
+function openContact(){
+    document.getElementById("popup").style.display = "block";
+    document.getElementById("popupTitle").textContent = "Contact Me";
 }
 
 function setLang(){
