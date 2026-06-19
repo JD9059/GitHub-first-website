@@ -225,8 +225,6 @@
     <div id="guessPage">
         <div class="container">
 
-            <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
-
             <div id="guessText">Guessing...</div>
 
             <img id="guessImg" src="pirate.png" alt="YouTuber image">
@@ -272,6 +270,7 @@
 <script>
 
 /* 📩 CONTACT SETTINGS */
+/* Put your iMessage email here in your private copy. */
 const CONTACT_ADDRESS = "PUT-YOUR-IMESSAGE-EMAIL-HERE";
 
 /* 💬 FEEDBACK + 📩 CONTACT */
@@ -749,6 +748,8 @@ let youtubers = [
     "KreekCraft"
 ];
 
+/* Captain Clue will only guess YouTubers in this image table for now.
+   Add more names here when you add more image files. */
 const youtuberImages = {
     "MrBeast": [
         "./youtubers/mrbeast.png",
@@ -897,10 +898,6 @@ function setGuessImage(paths) {
         paths = [paths];
     }
 
-    if (paths.length === 0) {
-        paths = ["pirate.png"];
-    }
-
     img.onerror = function () {
         pathIndex++;
 
@@ -908,7 +905,7 @@ function setGuessImage(paths) {
             img.src = paths[pathIndex];
         } else {
             img.onerror = null;
-            img.src = "pirate.png";
+            img.alt = "Image not found";
         }
     };
 
@@ -916,7 +913,9 @@ function setGuessImage(paths) {
 }
 
 function makeGuess() {
-    let available = youtubers.filter(name => !guessedAlready.includes(name));
+    let youtubersWithImages = Object.keys(youtuberImages);
+
+    let available = youtubersWithImages.filter(name => !guessedAlready.includes(name));
 
     if (available.length === 0) {
         showWinnerPage();
@@ -929,7 +928,7 @@ function makeGuess() {
     document.getElementById("guessText").innerHTML =
         uiText[currentLang].guessStart + "<b>" + currentGuess + "</b>?";
 
-    let imagePaths = youtuberImages[currentGuess] || ["pirate.png"];
+    let imagePaths = youtuberImages[currentGuess];
 
     setGuessImage(imagePaths);
 
