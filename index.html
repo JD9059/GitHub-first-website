@@ -171,8 +171,21 @@
 <script>
 
 /* 💬 FEEDBACK */
+
 function openFeedback() {
-    window.open("https://formspree.io/f/xgobrrnl", "_blank");
+    let msg = prompt("Type your feedback:");
+
+    if (msg) {
+        alert("Thanks for your feedback!\n\n" + msg);
+    }
+}
+
+function openContact() {
+    let msg = prompt("Type your message:");
+
+    if (msg) {
+        alert("Message received!\n\n" + msg);
+    }
 }
 
 /* 🎮 GAME DATA */
