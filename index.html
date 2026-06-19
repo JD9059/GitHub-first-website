@@ -216,7 +216,10 @@ let youtubers = [
     "Dream", "Technoblade", "Ludwig", "Moose", "Sharky", "LittleLizard", 
     "TinyTurtle", "UnspeakablePlays", "Diddens Fans"
 ]; // <-- Fixed missing closing bracket and semicolon here
-   
+const youtuberImages = {
+    "MrBeast": "youtubers/mrbeast.png",
+    "Diddens Fans": "youtubers/diddensfans.png"
+};
 const questions = [ // <-- Changed from extraQuestions to questions to match game logic
     "Did your YouTuber become famous before 2020?",
     "Did your YouTuber become famous after 2020?",
@@ -323,10 +326,14 @@ function nextQuestion() {
 }
 
 function makeGuess() {
+
     let guess = youtubers[Math.floor(Math.random() * youtubers.length)];
+
+    let image = youtuberImages[guess] || "pirate.png";
 
     document.getElementById("question").innerHTML =
         "🏴‍☠️ Are you thinking of <b>" + guess + "</b>?<br><br>" +
+        '<img src="' + image + '" style="width:200px;border-radius:15px;"><br><br>' +
         '<button class="yesBtn" onclick="handleGuessResult(true)">Yes</button>' +
         '<button class="noBtn" onclick="handleGuessResult(false)">No</button>';
 }
