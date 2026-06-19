@@ -2,343 +2,280 @@
 <html>
 
 <head>
-    <title>Captain Clue V2</title>
+<title>Captain Clue</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Calibri, sans-serif;
-            background: #87CEEB;
-            text-align: center;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #87CEEB;
+    text-align: center;
+}
 
-        /* 💬 FEEDBACK BUTTON */
-        #feedbackBtn {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            padding: 10px 15px;
-            font-size: 16px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            background: white;
-            z-index: 9999;
-        }
+/* TOP UI */
+#lang, #feedbackBtn, #contactBtn {
+    position: fixed;
+    top: 10px;
+    background: white;
+    padding: 8px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 9999;
+}
 
-        /* 🏴‍☠️ PIRATE IMAGE */
-        .pirate-img {
-            width: 150px;
-            margin-top: 20px;
-            animation: floatPirate 3s ease-in-out infinite;
-        }
+#lang { left: 10px; }
+#feedbackBtn { right: 10px; }
+#contactBtn { right: 120px; }
 
-        /* FLOAT ANIMATION */
-        @keyframes floatPirate {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+/* LAYOUT */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
 
-        #homePage,
-        #gamePage,
-        #winnerPage {
-            display: none;
-            min-height: 100vh;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
+/* BUTTONS */
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
 
-        #homePage {
-            display: flex;
-        }
+.yes { background: limegreen; color: white; }
+.no { background: red; color: white; }
+.dk { background: gray; color: white; }
+.prob { background: gold; }
+.probnot { background: orange; }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+/* IMAGE */
+img {
+    width: 160px;
+    border-radius: 10px;
+}
 
-        .flag {
-            font-size: 80px;
-        }
+/* POPUP */
+#popup {
+    display: none;
+    position: fixed;
+    top: 80px;
+    right: 10px;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    z-index: 9999;
+    width: 220px;
+}
+</style>
 
-        #question {
-            font-size: 30px;
-            margin: 20px;
-        }
-
-        button {
-            padding: 10px 15px;
-            margin: 5px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .yesBtn { background: limegreen; color: white; }
-        .noBtn { background: red; color: white; }
-        .dkBtn { background: gray; color: white; }
-        .probBtn { background: gold; }
-        .probNotBtn { background: orange; }
-        .utilityBtn { background: white; }
-
-        input {
-            padding: 10px;
-            font-size: 16px;
-        }
-    </style>
 </head>
 
 <body>
 
-<button id="feedbackBtn" onclick="openFeedback()">💬 Feedback</button>
+<!-- 🌍 LANGUAGE -->
+<select id="lang" onchange="setLang()">
+<option value="en">English</option>
+<option value="es">Español</option>
+<option value="fr">Français</option>
+<option value="de">Deutsch</option>
+<option value="it">Italiano</option>
+<option value="pt">Português</option>
+<option value="ru">Русский</option>
+<option value="ar">العربية</option>
+<option value="zh">中文</option>
+<option value="ja">日本語</option>
+<option value="ko">한국어</option>
+</select>
 
-<div id="homePage">
-    <div class="container">
+<!-- 💬 FEEDBACK -->
+<div id="feedbackBtn" onclick="openPopup('feedback')">Feedback</div>
 
-        <div class="flag">🏴‍☠️</div>
+<!-- 📩 CONTACT -->
+<div id="contactBtn" onclick="openPopup('contact')">Contact Me</div>
 
-        <h1>Captain Clue</h1>
-
-        <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
-
-        <p>Think of a YouTuber and I will guess it!</p>
-
-        <button onclick="startGame()">Start Game</button>
-
-    </div>
+<!-- POPUP BOX -->
+<div id="popup">
+    <h3 id="popupTitle"></h3>
+    <textarea id="popupText" style="width:100%;height:80px;"></textarea>
+    <br>
+    <button onclick="sendPopup()">Send</button>
 </div>
 
-<div id="gamePage">
-    <div class="container">
-
-        <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
-
-        <div id="question">Loading...</div>
-
-        <div>
-            <button class="yesBtn" onclick="answer('yes')">Yes</button>
-            <button class="noBtn" onclick="answer('no')">No</button>
-            <button class="dkBtn" onclick="answer('dk')">Don't Know</button>
-            <button class="probBtn" onclick="answer('probably')">Probably</button>
-            <button class="probNotBtn" onclick="answer('probablynot')">Probably Not</button>
-        </div>
-
-        <div>
-            <button class="utilityBtn" onclick="goBack()">⬅️ Go Back</button>
-            <button class="utilityBtn" onclick="skipQuestion()">⏭️ Skip</button>
-            <button class="utilityBtn" onclick="restartGame()">🔄 Restart</button>
-        </div>
-
-    </div>
+<!-- HOME -->
+<div id="home" class="container">
+    <h1 id="title">🏴‍☠️ Captain Clue</h1>
+    <img src="https://i.imgur.com/2yaf2wb.png">
+    <button onclick="start()">Start Game</button>
 </div>
 
-<div id="winnerPage">
-    <div class="container">
+<!-- GAME -->
+<div id="game" class="container" style="display:none">
 
-        <h2>🏆 You Win!</h2>
+    <h2 id="question"></h2>
 
-        <input id="newYoutuber" placeholder="Type YouTuber name">
-        <br><br>
-        <button onclick="saveNewYoutuber()">Save</button>
-
+    <div>
+        <button class="yes" onclick="answer(true)">Yes</button>
+        <button class="no" onclick="answer(false)">No</button>
+        <button class="dk" onclick="answer(null)">Don't Know</button>
+        <button class="prob" onclick="answer(true)">Probably</button>
+        <button class="probnot" onclick="answer(false)">Probably Not</button>
     </div>
+
+</div>
+
+<!-- GUESS -->
+<div id="guess" class="container" style="display:none">
+
+    <h2 id="guessText"></h2>
+    <img id="guessImg">
+
+    <button class="yes" onclick="correct()">Yes</button>
+    <button class="no" onclick="wrong()">No</button>
+
+</div>
+
+<!-- CONTINUE -->
+<div id="continue" class="container" style="display:none">
+
+    <h2>Continue?</h2>
+    <button class="yes" onclick="back()">Yes</button>
+    <button class="no" onclick="teach()">No</button>
+
 </div>
 
 <script>
 
-/* 💬 FEEDBACK */
-function openFeedback() {
-    window.open("https://formspree.io/f/xgobrrnl", "_blank");
+/* 🌍 LANGUAGE */
+let lang = "en";
+
+const texts = {
+en:"Captain Clue",
+es:"Capitán Clue",
+fr:"Capitaine Clue",
+de:"Captain Clue",
+it:"Capitano Clue",
+pt:"Capitão Clue",
+ru:"Капитан Клу",
+ar:"كابتن كلو",
+zh:"船长线索",
+ja:"キャプテン・クルー",
+ko:"캡틴 클루"
+};
+
+function setLang(){
+    lang = document.getElementById("lang").value;
+    document.getElementById("title").innerText = "🏴‍☠️ " + texts[lang];
 }
 
-/* 🎮 GAME DATA */
-let currentQuestion = 0;
-let confidence = 0;
+/* 💬 POPUP SYSTEM */
+let mode = "";
+
+function openPopup(type){
+    mode = type;
+    document.getElementById("popup").style.display = "block";
+    document.getElementById("popupTitle").innerText =
+        type === "feedback" ? "Feedback" : "Contact Me";
+}
+
+function sendPopup(){
+    let msg = document.getElementById("popupText").value;
+    if(!msg) return;
+
+    window.location.href =
+    "mailto:jdiddens2195@gmail.com?subject=" +
+    (mode === "feedback" ? "Captain Clue Feedback" : "Captain Clue Contact") +
+    "&body=" + encodeURIComponent(msg);
+
+    document.getElementById("popup").style.display = "none";
+    document.getElementById("popupText").value = "";
+}
+
+/* 🎮 GAME */
+let i = 0;
+let score = 0;
 
 let youtubers = [
-    "MrBeast", "DanTDM", "Preston", "Unspeakable", "Flamingo", "ThinkNoodles",
-    "PewDiePie", "Markiplier", "Jacksepticeye", "Airrack", "Ryan Trahan",
-    "Karl Jacobs", "GeorgeNotFound", "Sapnap", "BadBoyHalo", "Skeppy",
-    "TommyInnit", "Tubbo", "Ranboo", "Wilbur Soot", "Philza", "Mumbo Jumbo",
-    "Grian", "GoodTimesWithScar", "GeminiTay", "SmallishBeans", "SolidarityGaming",
-    "fWhip", "MythicalSausage", "Forge Labs", "Luke TheNotable", "Wattles",
-    "Pixlriffs", "Shulkercraft", "EyecraftMC", "PhoenixSC", "SkipTheTutorial",
-    "Knarfy", "ACookieGod", "Camman18", "ClownPierce", "Parrot", "Reddoons",
-    "Spoke", "Boosfer", "Bionic", "NotNico", "PrinceZam", "Minibloxia",
-    "DV Plays", "KonekoKitten", "RussoPlays", "Hyper", "Laughability",
-    "Tanker", "Bandites", "NapkinNate", "Napkinnate Games", "Remainings",
-    "Tofuu", "Temprist", "GreenLegocats123", "Denis", "Sketch", "Corl",
-    "Sub", "Jelly", "Slogo", "Crainer", "Caylus", "Infinite", "Unspeakable Gaming",
-    "MooseCraft", "Shark", "Little Kelly", "Little Carly", "Little Lizard Gaming",
-    "Tiny Turtle", "BeckBroJack", "PrestonPlayz", "BriannaPlayz", "ZHC",
-    "Ben Azelart", "Matthew Beem", "FaZe Rug", "Nick DiGiovanni", "Mark Rober",
-    "MKBHD", "iJustine", "Mrwhosetheboss", "Linus Tech Tips", "The Hacksmith",
-    "How Ridiculous", "Dude Perfect", "MatPat", "Game Theory", "Film Theory",
-    "Food Theory", "Jaiden Animations", "TheOdd1sOut", "Domics", "Let Me Explain Studios",
-    "SMii7Y", "VanossGaming", "H20 Delirious", "Moo Snuckel", "Terroriser", // <-- Fixed missing comma here
-    "Dream", "Technoblade", "Ludwig", "Moose", "Sharky", "LittleLizard", 
-    "TinyTurtle", "UnspeakablePlays", "Diddens Fans"
-]; // <-- Fixed missing closing bracket and semicolon here
-   
-const questions = [ // <-- Changed from extraQuestions to questions to match game logic
-    "Did your YouTuber become famous before 2020?",
-    "Did your YouTuber become famous after 2020?",
-    "Does your YouTuber have a verified channel?",
-    "Has your YouTuber ever changed their profile picture?",
-    "Does your YouTuber usually upload in English?", // <-- Fixed typo 'Doe,s'
-    "Does your YouTuber have an accent that fans recognize?",
-    "Does your YouTuber use custom thumbnails?",
-    "Does your YouTuber appear in every video?",
-    "Does your YouTuber sometimes let friends take over videos?",
-    "Does your YouTuber own more than one channel?",
-    "Has your YouTuber ever built something huge?",
-    "Has your YouTuber ever survived 100 days in a game?",
-    "Has your YouTuber ever completed a challenge series?",
-    "Has your YouTuber ever competed against friends?",
-    "Has your YouTuber ever hidden clues in videos?",
-    "Has your YouTuber ever done a giveaway?",
-    "Has your YouTuber ever made a charity video?",
-    "Has your YouTuber ever done a subscriber special?",
-    "Has your YouTuber ever celebrated a milestone on camera?",
-    "Has your YouTuber ever broken a world record?",
-    "Does your YouTuber own custom merchandise?",
-    "Does your YouTuber have their own brand?",
-    "Does your YouTuber have a famous pet?",
-    "Does your YouTuber often wear the same color?",
-    "Does your YouTuber use a cartoon version of themselves?",
-    "Does your YouTuber use a custom avatar?",
-    "Does your YouTuber appear in animated videos?",
-    "Does your YouTuber make content with siblings?",
-    "Does your YouTuber make content with their spouse?",
-    "Does your YouTuber make content with their parents?",
-    "Does your YouTuber usually smile in thumbnails?",
-    "Does your YouTuber make dramatic thumbnails?",
-    "Does your YouTuber use arrows in thumbnails?",
-    "Does your YouTuber use circles in thumbnails?",
-    "Does your YouTuber play games competitively?",
-    "Does your YouTuber play games casually?",
-    "Does your YouTuber make challenge content?",
-    "Does your YouTuber make experiment content?",
-    "Does your YouTuber make educational content?",
-    "Does your YouTuber make comedy content?",
-    "Would elementary school students know this YouTuber?",
-    "Would middle school students know this YouTuber?",
-    "Would high school students know this YouTuber?",
-    "Would college students know this YouTuber?",
-    "Would gamers recognize this YouTuber?",
-    "Would non-gamers recognize this YouTuber?",
-    "Does your YouTuber have a famous catchphrase?",
-    "Does your YouTuber have a signature laugh?",
-    "Does your YouTuber have a recognizable logo?",
-    "Does your YouTuber have a recognizable intro?",
-    "Has your YouTuber ever visited another continent?",
-    "Has your YouTuber ever filmed on a beach?",
-    "Has your YouTuber ever filmed in the snow?",
-    "Has your YouTuber ever filmed in a desert?",
-    "Has your YouTuber ever filmed on a boat?",
-    "Has your YouTuber ever filmed in an airplane?",
-    "Has your YouTuber ever filmed at a theme park?",
-    "Has your YouTuber ever filmed in a stadium?",
-    "Has your YouTuber ever filmed at a convention?",
-    "Has your YouTuber ever filmed in a hotel?",
-    "Does your YouTuber own a custom PC?",
-    "Does your YouTuber own multiple monitors?",
-    "Does your YouTuber use RGB lights?",
-    "Does your YouTuber have a custom desk setup?",
-    "Does your YouTuber have a gaming room?",
-    "Does your YouTuber have a studio room?",
-    "Does your YouTuber record with friends nearby?",
-    "Does your YouTuber record alone?",
-    "Does your YouTuber use a professional microphone?",
-    "Does your YouTuber use a webcam regularly?"
+{ name:"MrBeast", image:"https://i.imgur.com/9J6n3hR.png" },
+{ name:"Markiplier", image:"https://i.imgur.com/7Qx0G2M.png" },
+{ name:"DanTDM", image:"https://i.imgur.com/2R2Z8yQ.png" },
+{ name:"MKBHD", image:"https://i.imgur.com/Wv7QKxA.png" }
 ];
 
-/* 🎮 GAME FUNCTIONS */
+let questions = [
+"Is your YouTuber famous?",
+"Do they play games?",
+"Do they make challenges?",
+"Do they have millions of subscribers?",
+"Do they show their face?",
+"Do they upload often?"
+];
 
-function startGame() {
-    currentQuestion = 0;
-    confidence = 0;
+/* START */
+function start(){
+    i = 0;
+    score = 0;
 
-    document.getElementById("homePage").style.display = "none";
-    document.getElementById("gamePage").style.display = "flex";
+    document.getElementById("home").style.display="none";
+    document.getElementById("game").style.display="flex";
 
-    document.getElementById("question").textContent = questions[currentQuestion];
+    showQ();
 }
 
-function answer(type) {
-    if (type === "yes") confidence += 20;
-    if (type === "probably") confidence += 15;
-    if (type === "probablynot") confidence += 8;
-    if (type === "dk") confidence += 3;
-
-    nextQuestion();
+function showQ(){
+    document.getElementById("question").innerText = questions[i];
 }
 
-function nextQuestion() {
-    currentQuestion++;
+/* ANSWER */
+function answer(val){
+    if(val === true) score += 2;
+    if(val === false) score -= 1;
 
-    if (confidence >= 80 || currentQuestion >= questions.length) {
-        makeGuess();
+    i++;
+
+    if(i >= questions.length || score >= 10){
+        guess();
         return;
     }
 
-    document.getElementById("question").textContent = questions[currentQuestion];
+    showQ();
 }
 
-function makeGuess() {
-    let guess = youtubers[Math.floor(Math.random() * youtubers.length)];
+/* GUESS */
+function guess(){
+    let pick = youtubers[Math.floor(Math.random()*youtubers.length)];
 
-    document.getElementById("question").innerHTML =
-        "🏴‍☠️ Are you thinking of <b>" + guess + "</b>?<br><br>" +
-        '<button class="yesBtn" onclick="handleGuessResult(true)">Yes</button>' +
-        '<button class="noBtn" onclick="handleGuessResult(false)">No</button>';
+    document.getElementById("game").style.display="none";
+    document.getElementById("guess").style.display="flex";
+
+    document.getElementById("guessText").innerText =
+    "Are you thinking of " + pick.name + "?";
+
+    document.getElementById("guessImg").src = pick.image;
 }
 
-// Fixed logic for win/lose screens
-function handleGuessResult(isCorrect) {
-    if (isCorrect) {
-        alert("The Captain wins again! Huzzah! 🏴‍☠️");
-        restartGame();
-    } else {
-        // If the AI guessed wrong, show the Winner page so user can teach the AI
-        document.getElementById("gamePage").style.display = "none";
-        document.getElementById("winnerPage").style.display = "flex";
-    }
-}
-
-/* 🔧 UTILITIES */
-
-function goBack() {
-    if (currentQuestion > 0) {
-        currentQuestion--;
-        document.getElementById("question").textContent = questions[currentQuestion];
-    }
-}
-
-function skipQuestion() {
-    nextQuestion();
-}
-
-function restartGame() {
+/* RESULT */
+function correct(){
+    alert("Captain Clue wins!");
     location.reload();
 }
 
-function saveNewYoutuber() {
-    let name = document.getElementById("newYoutuber").value;
-
-    if (name !== "") {
-        youtubers.push(name);
-        alert("Saved " + name + " to the roster!");
-        restartGame();
-    }
+function wrong(){
+    document.getElementById("guess").style.display="none";
+    document.getElementById("continue").style.display="flex";
 }
 
-/* 🚀 START */
-window.onload = function () {
-    document.getElementById("homePage").style.display = "flex";
-};
+function back(){
+    document.getElementById("continue").style.display="none";
+    document.getElementById("game").style.display="flex";
+    showQ();
+}
+
+function teach(){
+    location.reload();
+}
 
 </script>
 
