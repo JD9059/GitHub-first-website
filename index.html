@@ -10,48 +10,61 @@
             font-family: Calibri, sans-serif;
             background: #87CEEB;
             text-align: center;
+            font-weight: bold;
+            font-size: 14px;
         }
 
-        /* 💬 FEEDBACK BUTTON */
+        #lang {
+            position: fixed;
+            top: 8px;
+            left: 8px;
+            padding: 6px;
+            font-size: 12px;
+            border-radius: 8px;
+            z-index: 9999;
+        }
+
         #feedbackBtn {
             position: fixed;
-            top: 15px;
-            right: 15px;
-            padding: 10px 15px;
-            font-size: 16px;
+            top: 8px;
+            right: 8px;
+            padding: 6px 10px;
+            font-size: 12px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
             background: white;
             z-index: 9999;
         }
-        #contactBtn{
-        position:fixed;
-        top:15px;
-        right:140px;
-        padding:10px 15px;
-        border:none;
-        border-radius:10px;
-        cursor:pointer;
-        background:white;
-        z-index:9999;
-    }
 
-        /* 🏴‍☠️ PIRATE IMAGE */
+        #contactBtn {
+            position: fixed;
+            top: 8px;
+            right: 105px;
+            padding: 6px 10px;
+            font-size: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: white;
+            z-index: 9999;
+        }
+
         .pirate-img {
-            width: 150px;
-            margin-top: 20px;
+            width: 100px;
+            margin-top: 10px;
             animation: floatPirate 3s ease-in-out infinite;
         }
 
-        /* FLOAT ANIMATION */
         @keyframes floatPirate {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-8px); }
         }
 
         #homePage,
         #gamePage,
+        #guessPage,
+        #continuePage,
         #winnerPage {
             display: none;
             min-height: 100vh;
@@ -68,23 +81,42 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            max-width: 850px;
+            width: 90%;
         }
 
         .flag {
-            font-size: 80px;
+            font-size: 50px;
         }
 
-        #question {
-            font-size: 30px;
-            margin: 20px;
+        h1 {
+            font-size: 28px;
+            margin: 8px;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin: 8px;
+        }
+
+        p {
+            margin: 8px;
+        }
+
+        #question,
+        #guessText {
+            font-size: 22px;
+            margin: 12px;
         }
 
         button {
-            padding: 10px 15px;
-            margin: 5px;
+            padding: 7px 10px;
+            margin: 3px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: bold;
+            font-size: 13px;
         }
 
         .yesBtn { background: limegreen; color: white; }
@@ -95,117 +127,658 @@
         .utilityBtn { background: white; }
 
         input {
-            padding: 10px;
-            font-size: 16px;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        #guessImg {
+            width: 150px;
+            border-radius: 12px;
+            margin: 8px;
+            background: white;
+        }
+
+        #feedbackBox {
+            display: none;
+            position: fixed;
+            top: 50px;
+            right: 8px;
+            background: white;
+            padding: 8px;
+            border-radius: 10px;
+            z-index: 9999;
+            width: 220px;
+        }
+
+        #feedbackText {
+            width: 195px;
+            height: 70px;
         }
     </style>
 </head>
 
 <body>
-    <select id="lang" onchange="setLang()" style="position:fixed;top:10px;left:10px;z-index:9999;">
-    <option value="en">English</option>
-    <option value="es">Español</option>
-    <option value="fr">Français</option>
-    <option value="de">Deutsch</option>
-    <option value="it">Italiano</option>
-    <option value="pt">Português</option>
-    <option value="ja">日本語</option>
-    <option value="ko">한국어</option>
+
+    <select id="lang" onchange="setLang()">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="it">Italiano</option>
+        <option value="pt">Português</option>
+        <option value="ja">日本語</option>
+        <option value="ko">한국어</option>
     </select>
 
     <button id="feedbackBtn" onclick="openFeedback()">💬 Feedback</button>
     <button id="contactBtn" onclick="openContact()">📩 Contact Me</button>
-    
-<div id="homePage">
-    <div class="container">
 
-        <div class="flag">🏴‍☠️</div>
-
-        <h1>Captain Clue</h1>
-
-        <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
-
-        <p>Think of a YouTuber and I will guess it!</p>
-
-        <button onclick="startGame()">Start Game</button>
-
+    <div id="feedbackBox">
+        <h3 id="feedbackTitle">Feedback</h3>
+        <textarea id="feedbackText" placeholder="Type your feedback..."></textarea>
+        <br>
+        <button onclick="submitFeedback()">Submit</button>
+        <button onclick="closeFeedback()">Close</button>
+        <p id="feedbackThanks"></p>
     </div>
-</div>
 
-<div id="gamePage">
-    <div class="container">
+    <div id="homePage">
+        <div class="container">
 
-        <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
+            <div class="flag">🏴‍☠️</div>
 
-        <div id="question">Loading...</div>
+            <h1 id="titleText">Captain Clue</h1>
 
-        <div>
-            <button class="yesBtn" onclick="answer('yes')">Yes</button>
-            <button class="noBtn" onclick="answer('no')">No</button>
-            <button class="dkBtn" onclick="answer('dk')">Don't Know</button>
-            <button class="probBtn" onclick="answer('probably')">Probably</button>
-            <button class="probNotBtn" onclick="answer('probablynot')">Probably Not</button>
+            <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
+
+            <p id="introText">Think of a YouTuber and I will guess it!</p>
+
+            <button id="startBtn" onclick="startGame()">Start Game</button>
+
         </div>
+    </div>
 
-        <div>
-            <button class="utilityBtn" onclick="goBack()">⬅️ Go Back</button>
-            <button class="utilityBtn" onclick="skipQuestion()">⏭️ Skip</button>
-            <button class="utilityBtn" onclick="restartGame()">🔄 Restart</button>
+    <div id="gamePage">
+        <div class="container">
+
+            <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
+
+            <div id="question">Loading...</div>
+
+            <div id="answerButtons">
+                <button id="yesBtn" class="yesBtn" onclick="answer('yes')">Yes</button>
+                <button id="noBtn" class="noBtn" onclick="answer('no')">No</button>
+                <button id="dkBtn" class="dkBtn" onclick="answer('dk')">Don't Know</button>
+                <button id="probBtn" class="probBtn" onclick="answer('probably')">Probably</button>
+                <button id="probNotBtn" class="probNotBtn" onclick="answer('probablynot')">Probably Not</button>
+            </div>
+
+            <div id="utilityButtons">
+                <button id="backBtn" class="utilityBtn" onclick="goBack()">⬅️ Go Back</button>
+                <button id="skipBtn" class="utilityBtn" onclick="skipQuestion()">⏭️ Skip</button>
+                <button id="restartBtn" class="utilityBtn" onclick="restartGame()">🔄 Restart</button>
+            </div>
+
         </div>
-
     </div>
-</div>
 
-<div id="winnerPage">
-    <div class="container">
+    <div id="guessPage">
+        <div class="container">
 
-        <h2>🏆 You Win!</h2>
+            <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
 
-        <input id="newYoutuber" placeholder="Type YouTuber name">
-        <br><br>
-        <button onclick="saveNewYoutuber()">Save</button>
+            <div id="guessText">Guessing...</div>
 
+            <img id="guessImg" src="pirate.png" alt="YouTuber image">
+
+            <div>
+                <button id="guessYesBtn" class="yesBtn" onclick="handleGuessResult(true)">Yes</button>
+                <button id="guessNoBtn" class="noBtn" onclick="handleGuessResult(false)">No</button>
+            </div>
+
+        </div>
     </div>
-</div>
+
+    <div id="continuePage">
+        <div class="container">
+
+            <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
+
+            <h2 id="continueText">Continue?</h2>
+
+            <button id="continueYesBtn" class="yesBtn" onclick="continueGame()">Yes</button>
+            <button id="continueNoBtn" class="noBtn" onclick="showWinnerPage()">No</button>
+
+        </div>
+    </div>
+
+    <div id="winnerPage">
+        <div class="container">
+
+            <img src="pirate.png" class="pirate-img" alt="Captain Clue Pirate">
+
+            <h2 id="winnerTitle">🏆 You Win!</h2>
+
+            <p id="winnerPrompt">Who were you thinking of?</p>
+
+            <input id="newYoutuber" placeholder="Type YouTuber name">
+            <br><br>
+
+            <button id="saveBtn" onclick="saveNewYoutuber()">Save</button>
+
+        </div>
+    </div>
 
 <script>
 
-/* 💬 FEEDBACK */
+/* 📩 CONTACT SETTINGS */
+const CONTACT_ADDRESS = "PUT-YOUR-IMESSAGE-EMAIL-HERE";
 
+/* 💬 FEEDBACK + 📩 CONTACT */
 function openFeedback() {
-    let msg = prompt("Type your feedback:");
+    document.getElementById("feedbackBox").style.display = "block";
+    document.getElementById("feedbackThanks").textContent = "";
+}
 
-    if (msg) {
-        alert("Thanks for your feedback!\n\n" + msg);
+function closeFeedback() {
+    document.getElementById("feedbackBox").style.display = "none";
+}
+
+function submitFeedback() {
+    let msg = document.getElementById("feedbackText").value.trim();
+
+    if (msg === "") {
+        alert("Please type feedback first.");
+        return;
     }
+
+    document.getElementById("feedbackThanks").textContent =
+        "Thank you for your feedback!";
+
+    document.getElementById("feedbackText").value = "";
 }
 
 function openContact() {
-    let msg = prompt("Type your message:");
+    let msg = prompt("Type your message to Captain Clue:");
 
-    if (msg) {
-        alert("Message received!\n\n" + msg);
+    if (msg && msg.trim() !== "") {
+        window.location.href =
+            "sms:" + CONTACT_ADDRESS + "?&body=" + encodeURIComponent(msg);
     }
+}
+
+/* 🌍 LANGUAGE */
+let currentLang = "en";
+
+const uiText = {
+    en: {
+        title: "Captain Clue",
+        intro: "Think of a YouTuber and I will guess it!",
+        start: "Start Game",
+        feedback: "💬 Feedback",
+        contact: "📩 Contact Me",
+        yes: "Yes",
+        no: "No",
+        dk: "Don't Know",
+        probably: "Probably",
+        probablyNot: "Probably Not",
+        back: "⬅️ Go Back",
+        skip: "⏭️ Skip",
+        restart: "🔄 Restart",
+        continueText: "Continue?",
+        winnerTitle: "🏆 You Win!",
+        winnerPrompt: "Who were you thinking of?",
+        save: "Save",
+        guessStart: "🏴‍☠️ Are you thinking of "
+    },
+    es: {
+        title: "Capitán Clue",
+        intro: "¡Piensa en un YouTuber y lo adivinaré!",
+        start: "Comenzar",
+        feedback: "💬 Comentarios",
+        contact: "📩 Contáctame",
+        yes: "Sí",
+        no: "No",
+        dk: "No sé",
+        probably: "Probablemente",
+        probablyNot: "Probablemente no",
+        back: "⬅️ Volver",
+        skip: "⏭️ Saltar",
+        restart: "🔄 Reiniciar",
+        continueText: "¿Continuar?",
+        winnerTitle: "🏆 ¡Ganaste!",
+        winnerPrompt: "¿En quién estabas pensando?",
+        save: "Guardar",
+        guessStart: "🏴‍☠️ ¿Estás pensando en "
+    },
+    fr: {
+        title: "Capitaine Clue",
+        intro: "Pense à un YouTuber et je vais deviner !",
+        start: "Démarrer",
+        feedback: "💬 Avis",
+        contact: "📩 Contacte-moi",
+        yes: "Oui",
+        no: "Non",
+        dk: "Je ne sais pas",
+        probably: "Probablement",
+        probablyNot: "Probablement pas",
+        back: "⬅️ Retour",
+        skip: "⏭️ Passer",
+        restart: "🔄 Recommencer",
+        continueText: "Continuer ?",
+        winnerTitle: "🏆 Tu as gagné !",
+        winnerPrompt: "À qui pensais-tu ?",
+        save: "Sauvegarder",
+        guessStart: "🏴‍☠️ Est-ce que tu penses à "
+    },
+    de: {
+        title: "Captain Clue",
+        intro: "Denk an einen YouTuber und ich rate ihn!",
+        start: "Start",
+        feedback: "💬 Feedback",
+        contact: "📩 Kontakt",
+        yes: "Ja",
+        no: "Nein",
+        dk: "Weiß nicht",
+        probably: "Wahrscheinlich",
+        probablyNot: "Wahrscheinlich nicht",
+        back: "⬅️ Zurück",
+        skip: "⏭️ Überspringen",
+        restart: "🔄 Neustart",
+        continueText: "Weiter?",
+        winnerTitle: "🏆 Du hast gewonnen!",
+        winnerPrompt: "An wen hast du gedacht?",
+        save: "Speichern",
+        guessStart: "🏴‍☠️ Denkst du an "
+    },
+    it: {
+        title: "Capitano Clue",
+        intro: "Pensa a uno YouTuber e lo indovinerò!",
+        start: "Inizia",
+        feedback: "💬 Feedback",
+        contact: "📩 Contattami",
+        yes: "Sì",
+        no: "No",
+        dk: "Non lo so",
+        probably: "Probabilmente",
+        probablyNot: "Probabilmente no",
+        back: "⬅️ Indietro",
+        skip: "⏭️ Salta",
+        restart: "🔄 Riavvia",
+        continueText: "Continuare?",
+        winnerTitle: "🏆 Hai vinto!",
+        winnerPrompt: "A chi stavi pensando?",
+        save: "Salva",
+        guessStart: "🏴‍☠️ Stai pensando a "
+    },
+    pt: {
+        title: "Capitão Clue",
+        intro: "Pense em um YouTuber e eu vou adivinhar!",
+        start: "Começar",
+        feedback: "💬 Feedback",
+        contact: "📩 Contato",
+        yes: "Sim",
+        no: "Não",
+        dk: "Não sei",
+        probably: "Provavelmente",
+        probablyNot: "Provavelmente não",
+        back: "⬅️ Voltar",
+        skip: "⏭️ Pular",
+        restart: "🔄 Reiniciar",
+        continueText: "Continuar?",
+        winnerTitle: "🏆 Você venceu!",
+        winnerPrompt: "Em quem você estava pensando?",
+        save: "Salvar",
+        guessStart: "🏴‍☠️ Você está pensando em "
+    },
+    ja: {
+        title: "キャプテン・クルー",
+        intro: "YouTuberを思い浮かべて！当ててみるよ！",
+        start: "スタート",
+        feedback: "💬 フィードバック",
+        contact: "📩 連絡",
+        yes: "はい",
+        no: "いいえ",
+        dk: "わからない",
+        probably: "たぶん",
+        probablyNot: "たぶん違う",
+        back: "⬅️ 戻る",
+        skip: "⏭️ スキップ",
+        restart: "🔄 最初から",
+        continueText: "続ける？",
+        winnerTitle: "🏆 勝ち！",
+        winnerPrompt: "誰を考えていたの？",
+        save: "保存",
+        guessStart: "🏴‍☠️ 考えているのは "
+    },
+    ko: {
+        title: "캡틴 클루",
+        intro: "유튜버를 생각해 봐! 내가 맞혀볼게!",
+        start: "시작",
+        feedback: "💬 피드백",
+        contact: "📩 연락하기",
+        yes: "예",
+        no: "아니요",
+        dk: "모르겠어요",
+        probably: "아마도",
+        probablyNot: "아마 아닐걸요",
+        back: "⬅️ 뒤로",
+        skip: "⏭️ 넘기기",
+        restart: "🔄 다시 시작",
+        continueText: "계속할까요?",
+        winnerTitle: "🏆 이겼어요!",
+        winnerPrompt: "누구를 생각하고 있었나요?",
+        save: "저장",
+        guessStart: "🏴‍☠️ 생각하고 있는 유튜버가 "
+    }
+};
+
+function setLang() {
+    currentLang = document.getElementById("lang").value;
+    updateLanguage();
+}
+
+function updateLanguage() {
+    let t = uiText[currentLang];
+
+    document.getElementById("titleText").textContent = "🏴‍☠️ " + t.title;
+    document.getElementById("introText").textContent = t.intro;
+    document.getElementById("startBtn").textContent = t.start;
+    document.getElementById("feedbackBtn").textContent = t.feedback;
+    document.getElementById("contactBtn").textContent = t.contact;
+
+    document.getElementById("yesBtn").textContent = t.yes;
+    document.getElementById("noBtn").textContent = t.no;
+    document.getElementById("dkBtn").textContent = t.dk;
+    document.getElementById("probBtn").textContent = t.probably;
+    document.getElementById("probNotBtn").textContent = t.probablyNot;
+
+    document.getElementById("backBtn").textContent = t.back;
+    document.getElementById("skipBtn").textContent = t.skip;
+    document.getElementById("restartBtn").textContent = t.restart;
+
+    document.getElementById("guessYesBtn").textContent = t.yes;
+    document.getElementById("guessNoBtn").textContent = t.no;
+
+    document.getElementById("continueText").textContent = t.continueText;
+    document.getElementById("continueYesBtn").textContent = t.yes;
+    document.getElementById("continueNoBtn").textContent = t.no;
+
+    document.getElementById("winnerTitle").textContent = t.winnerTitle;
+    document.getElementById("winnerPrompt").textContent = t.winnerPrompt;
+    document.getElementById("saveBtn").textContent = t.save;
 }
 
 /* 🎮 GAME DATA */
 let currentQuestion = 0;
 let confidence = 0;
+let currentGuess = "";
+let guessedAlready = [];
 
 let youtubers = [
-    "MrBeast", "Diddens Fans"
-]; // <-- Fixed missing closing bracket and semicolon here
+    "MrBeast",
+    "Diddens Fans",
+    "DanTDM",
+    "Preston",
+    "PrestonPlayz",
+    "BriannaPlayz",
+    "Unspeakable",
+    "Unspeakable Gaming",
+    "UnspeakablePlays",
+    "Flamingo",
+    "ThinkNoodles",
+    "PewDiePie",
+    "Markiplier",
+    "Jacksepticeye",
+    "Airrack",
+    "Ryan Trahan",
+    "Karl Jacobs",
+    "GeorgeNotFound",
+    "Sapnap",
+    "BadBoyHalo",
+    "Skeppy",
+    "TommyInnit",
+    "Tubbo",
+    "Ranboo",
+    "Wilbur Soot",
+    "Philza",
+    "Dream",
+    "Technoblade",
+    "Ludwig",
+    "Mumbo Jumbo",
+    "Grian",
+    "GoodTimesWithScar",
+    "GeminiTay",
+    "SmallishBeans",
+    "SolidarityGaming",
+    "fWhip",
+    "MythicalSausage",
+    "Forge Labs",
+    "Luke TheNotable",
+    "Wattles",
+    "Pixlriffs",
+    "Shulkercraft",
+    "EyecraftMC",
+    "PhoenixSC",
+    "SkipTheTutorial",
+    "Knarfy",
+    "ACookieGod",
+    "Camman18",
+    "ClownPierce",
+    "Parrot",
+    "Reddoons",
+    "Spoke",
+    "Boosfer",
+    "Bionic",
+    "NotNico",
+    "PrinceZam",
+    "Minibloxia",
+    "DV Plays",
+    "KonekoKitten",
+    "RussoPlays",
+    "Hyper",
+    "Laughability",
+    "Tanker",
+    "Bandites",
+    "NapkinNate",
+    "Napkinnate Games",
+    "Remainings",
+    "Tofuu",
+    "Temprist",
+    "GreenLegocats123",
+    "Denis",
+    "Sketch",
+    "Corl",
+    "Sub",
+    "Jelly",
+    "Slogo",
+    "Crainer",
+    "Caylus",
+    "Infinite",
+    "MooseCraft",
+    "Moose",
+    "Shark",
+    "Sharky",
+    "Little Kelly",
+    "Little Carly",
+    "Little Lizard Gaming",
+    "LittleLizard",
+    "Tiny Turtle",
+    "TinyTurtle",
+    "BeckBroJack",
+    "ZHC",
+    "Ben Azelart",
+    "Matthew Beem",
+    "FaZe Rug",
+    "Nick DiGiovanni",
+    "Mark Rober",
+    "MKBHD",
+    "iJustine",
+    "Mrwhosetheboss",
+    "Linus Tech Tips",
+    "The Hacksmith",
+    "How Ridiculous",
+    "Dude Perfect",
+    "MatPat",
+    "Game Theory",
+    "Film Theory",
+    "Food Theory",
+    "Style Theory",
+    "Jaiden Animations",
+    "TheOdd1sOut",
+    "Domics",
+    "Let Me Explain Studios",
+    "SMii7Y",
+    "VanossGaming",
+    "H2ODelirious",
+    "Moo Snuckel",
+    "Terroriser",
+    "BajanCanadian",
+    "TheCampingRusher",
+    "Bodil40",
+    "AntVenom",
+    "SkyDoesMinecraft",
+    "Deadlox",
+    "MitchGames247",
+    "HuskyMudkipz",
+    "PeteZahHutt",
+    "Vikkstar123",
+    "Woofless",
+    "TheAtlanticCraft",
+    "CavemanFilms",
+    "AviatorGaming",
+    "MrCrainer",
+    "TheDiamondMinecart",
+    "CaptainSparklez",
+    "LDShadowLady",
+    "iHasCupquake",
+    "StacyPlays",
+    "Yammy",
+    "Shubble",
+    "Dangthatsalongname",
+    "Joey Graceffa",
+    "FalseSymmetry",
+    "PearlescentMoon",
+    "ZombieCleo",
+    "Rendog",
+    "XisumaVoid",
+    "Cubfan135",
+    "TangoTek",
+    "ImpulseSV",
+    "ZedaphPlays",
+    "JoeHills",
+    "Keralis",
+    "Stressmonster",
+    "Welsknight",
+    "Docm77",
+    "Iskall85",
+    "XBcrafted",
+    "Etho",
+    "BdoubleO100",
+    "VintageBeef",
+    "PauseUnpause",
+    "Guude",
+    "KurtJMac",
+    "GenerikB",
+    "Zisteau",
+    "BlockFacts",
+    "Fundy",
+    "FundyLive",
+    "Dan Rhodes",
+    "CallMeHaley",
+    "Bubbo",
+    "Zaypixel",
+    "BlueBits",
+    "ItsMarloe",
+    "TapL",
+    "Fruitberries",
+    "IlluminaHD",
+    "DreamXD",
+    "ParkerGames",
+    "Feinberg",
+    "TimeDeo",
+    "IntelEdits",
+    "Refraction",
+    "Purplecliffe",
+    "MandJTV Plays",
+    "PokeMEN7",
+    "Austin John Plays",
+    "UnitedGamer",
+    "GameboyLuke",
+    "DeepPocketMonster",
+    "PM7",
+    "Foltyn",
+    "AbdallahSmash",
+    "ProsafiaGaming",
+    "Nintendo Life",
+    "SwitchForce",
+    "Austin Evans",
+    "SpawnPoiint",
+    "TheRetroFuture",
+    "Ryguyrocky",
+    "Logdotzip",
+    "DougDoug",
+    "Grace Sharer",
+    "Carter Sharer",
+    "Stephen Sharer",
+    "DonutTheDog",
+    "Funnel Vision",
+    "FGTeeV",
+    "LankyBox",
+    "PrestonGamez",
+    "Typical Gamer",
+    "LazarBeam",
+    "Fresh",
+    "Ninja",
+    "SypherPK",
+    "Nick Eh 30",
+    "Ali-A",
+    "DanTDM Live",
+    "CookieSwirlC",
+    "Guava Juice",
+    "Collins Key",
+    "Brent Rivera",
+    "Lexi Rivera",
+    "Unspeakable Reacts",
+    "Aphmau",
+    "ItsFunneh",
+    "Krew",
+    "GamingWithKev",
+    "ProjectJamesify",
+    "Poke",
+    "KreekCraft"
+];
 
 const youtuberImages = {
-    "MrBeast": "youtubers/mrbeast.png",
-    "Diddens Fans": "youtubers/diddensfans.png"
+    "MrBeast": [
+        "./youtubers/mrbeast.png",
+        "youtubers/mrbeast.png",
+        "./youtubers/mrbeast.jpg",
+        "youtubers/mrbeast.jpg",
+        "./mrbeast.png",
+        "mrbeast.png",
+        "./mrbeast.jpg",
+        "mrbeast.jpg"
+    ],
+    "Diddens Fans": [
+        "./youtubers/diddensfans.png",
+        "youtubers/diddensfans.png",
+        "./youtubers/diddensfans.jpg",
+        "youtubers/diddensfans.jpg",
+        "./diddensfans.png",
+        "diddensfans.png",
+        "./diddensfans.jpg",
+        "diddensfans.jpg"
+    ]
 };
-const questions = [ // <-- Changed from extraQuestions to questions to match game logic
+
+const questions = [
+    "ARE YOU READY TO PLAY GUESS THE YOUTUBER!?!",
     "Did your YouTuber become famous before 2020?",
     "Did your YouTuber become famous after 2020?",
     "Does your YouTuber have a verified channel?",
     "Has your YouTuber ever changed their profile picture?",
-    "Does your YouTuber usually upload in English?", // <-- Fixed typo 'Doe,s'
+    "Does your YouTuber usually upload in English?",
     "Does your YouTuber have an accent that fans recognize?",
     "Does your YouTuber use custom thumbnails?",
     "Does your YouTuber appear in every video?",
@@ -274,14 +847,22 @@ const questions = [ // <-- Changed from extraQuestions to questions to match gam
 ];
 
 /* 🎮 GAME FUNCTIONS */
+function showPage(pageId) {
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("gamePage").style.display = "none";
+    document.getElementById("guessPage").style.display = "none";
+    document.getElementById("continuePage").style.display = "none";
+    document.getElementById("winnerPage").style.display = "none";
+
+    document.getElementById(pageId).style.display = "flex";
+}
 
 function startGame() {
     currentQuestion = 0;
     confidence = 0;
+    guessedAlready = [];
 
-    document.getElementById("homePage").style.display = "none";
-    document.getElementById("gamePage").style.display = "flex";
-
+    showPage("gamePage");
     document.getElementById("question").textContent = questions[currentQuestion];
 }
 
@@ -290,6 +871,9 @@ function answer(type) {
     if (type === "probably") confidence += 15;
     if (type === "probablynot") confidence += 8;
     if (type === "dk") confidence += 3;
+    if (type === "no") confidence -= 5;
+
+    if (confidence < 0) confidence = 0;
 
     nextQuestion();
 }
@@ -297,7 +881,7 @@ function answer(type) {
 function nextQuestion() {
     currentQuestion++;
 
-    if (confidence >= 80 || currentQuestion >= questions.length) {
+    if (confidence >= 250 || currentQuestion >= questions.length) {
         makeGuess();
         return;
     }
@@ -305,32 +889,75 @@ function nextQuestion() {
     document.getElementById("question").textContent = questions[currentQuestion];
 }
 
-function makeGuess() {
+function setGuessImage(paths) {
+    let img = document.getElementById("guessImg");
+    let pathIndex = 0;
 
-    let guess = youtubers[Math.floor(Math.random() * youtubers.length)];
+    if (!Array.isArray(paths)) {
+        paths = [paths];
+    }
 
-    let image = youtuberImages[guess] || "pirate.png";
+    if (paths.length === 0) {
+        paths = ["pirate.png"];
+    }
 
-    document.getElementById("question").innerHTML =
-        "🏴‍☠️ Are you thinking of <b>" + guess + "</b>?<br><br>" +
-        '<img src="' + image + '" style="width:200px;border-radius:15px;"><br><br>' +
-        '<button class="yesBtn" onclick="handleGuessResult(true)">Yes</button>' +
-        '<button class="noBtn" onclick="handleGuessResult(false)">No</button>';
+    img.onerror = function () {
+        pathIndex++;
+
+        if (pathIndex < paths.length) {
+            img.src = paths[pathIndex];
+        } else {
+            img.onerror = null;
+            img.src = "pirate.png";
+        }
+    };
+
+    img.src = paths[0];
 }
 
-// Fixed logic for win/lose screens
+function makeGuess() {
+    let available = youtubers.filter(name => !guessedAlready.includes(name));
+
+    if (available.length === 0) {
+        showWinnerPage();
+        return;
+    }
+
+    currentGuess = available[Math.floor(Math.random() * available.length)];
+    guessedAlready.push(currentGuess);
+
+    document.getElementById("guessText").innerHTML =
+        uiText[currentLang].guessStart + "<b>" + currentGuess + "</b>?";
+
+    let imagePaths = youtuberImages[currentGuess] || ["pirate.png"];
+
+    setGuessImage(imagePaths);
+
+    showPage("guessPage");
+}
+
 function handleGuessResult(isCorrect) {
     if (isCorrect) {
         alert("The Captain wins again! Huzzah! 🏴‍☠️");
         restartGame();
     } else {
-        // If the AI guessed wrong, show the Winner page so user can teach the AI
-        document.getElementById("gamePage").style.display = "none";
-        document.getElementById("winnerPage").style.display = "flex";
+        showPage("continuePage");
     }
 }
 
-/* 🔧 UTILITIES */
+function continueGame() {
+    if (currentQuestion >= questions.length) {
+        makeGuess();
+        return;
+    }
+
+    showPage("gamePage");
+    document.getElementById("question").textContent = questions[currentQuestion];
+}
+
+function showWinnerPage() {
+    showPage("winnerPage");
+}
 
 function goBack() {
     if (currentQuestion > 0) {
@@ -348,33 +975,19 @@ function restartGame() {
 }
 
 function saveNewYoutuber() {
-    let name = document.getElementById("newYoutuber").value;
+    let name = document.getElementById("newYoutuber").value.trim();
 
     if (name !== "") {
         youtubers.push(name);
-        alert("Saved " + name + " to the roster!");
+        alert("Thank you for teaching Captain Clue a new YouTuber!\n\nSaved: " + name);
         restartGame();
     }
 }
 
-/* 🚀 START */
 window.onload = function () {
-    document.getElementById("homePage").style.display = "flex";
+    showPage("homePage");
+    updateLanguage();
 };
-
-
-
-function setLang(){
-    let lang = document.getElementById("lang").value;
-
-    if(lang==="es"){
-        document.querySelector("h1").textContent = "🏴‍☠️ Capitán Clue";
-    }else if(lang==="fr"){
-        document.querySelector("h1").textContent = "🏴‍☠️ Capitaine Clue";
-    }else{
-        document.querySelector("h1").textContent = "🏴‍☠️ Captain Clue";
-    }
-}
 
 </script>
 
