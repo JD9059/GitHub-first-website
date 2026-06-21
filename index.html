@@ -289,7 +289,16 @@ function submitFeedback() {
     if (msg === "") {
         alert("Please type feedback first.");
         return;
-    }
+}
+
+    document.getElementById("feedbackThanks").textContent =
+        "Thank you for your feedback!";
+
+    document.getElementById("feedbackText").value = "";
+
+    window.location.href =
+        "sms:" + CONTACT_ADDRESS + "?&body=" + encodeURIComponent("Captain Clue Feedback: " + msg);
+}
 
     document.getElementById("feedbackThanks").textContent =
         "Thank you for your feedback!";
