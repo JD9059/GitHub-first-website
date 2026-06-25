@@ -57,8 +57,13 @@
         }
 
         @keyframes floatPirate {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
         }
 
         #homePage,
@@ -119,23 +124,36 @@
             font-size: 13px;
         }
 
-        .yesBtn { background: limegreen; color: white; }
-        .noBtn { background: red; color: white; }
-        .dkBtn { background: gray; color: white; }
-        .probBtn { background: gold; }
-        .probNotBtn { background: orange; }
-        .utilityBtn { background: white; }
+        .yesBtn {
+            background: limegreen;
+            color: white;
+        }
+
+        .noBtn {
+            background: red;
+            color: white;
+        }
+
+        .dkBtn {
+            background: gray;
+            color: white;
+        }
+
+        .probBtn {
+            background: gold;
+        }
+
+        .probNotBtn {
+            background: orange;
+        }
+
+        .utilityBtn {
+            background: white;
+        }
 
         input {
             padding: 8px;
             font-size: 14px;
-        }
-
-        #guessImg {
-            width: 150px;
-            border-radius: 12px;
-            margin: 8px;
-            background: white;
         }
 
         #feedbackBox {
@@ -153,6 +171,10 @@
         #feedbackText {
             width: 195px;
             height: 70px;
+        }
+
+        #feedbackThanks {
+            font-size: 12px;
         }
     </style>
 </head>
@@ -175,10 +197,10 @@
 
     <div id="feedbackBox">
         <h3 id="feedbackTitle">Feedback</h3>
-        <textarea id="feedbackText" placeholder="Type your feedback..."></textarea>
+        <textarea id="feedbackText" placeholder="Type real feedback..."></textarea>
         <br>
-        <button onclick="submitFeedback()">Submit</button>
-        <button onclick="closeFeedback()">Close</button>
+        <button id="feedbackSubmitBtn" onclick="submitFeedback()">Submit</button>
+        <button id="feedbackCloseBtn" onclick="closeFeedback()">Close</button>
         <p id="feedbackThanks"></p>
     </div>
 
@@ -227,8 +249,6 @@
 
             <div id="guessText">Guessing...</div>
 
-            <img id="guessImg" src="pirate.png" alt="YouTuber image">
-
             <div>
                 <button id="guessYesBtn" class="yesBtn" onclick="handleGuessResult(true)">Yes</button>
                 <button id="guessNoBtn" class="noBtn" onclick="handleGuessResult(false)">No</button>
@@ -270,53 +290,11 @@
 <script>
 
 /* 📩 CONTACT SETTINGS */
-/* Put your iMessage email here in your private copy. */
 const CONTACT_ADDRESS = "jackbug412@icloud.com";
 
-/* 💬 FEEDBACK + 📩 CONTACT */
-function openFeedback() {
-    document.getElementById("feedbackBox").style.display = "block";
-    document.getElementById("feedbackThanks").textContent = "";
-}
-
-function closeFeedback() {
-    document.getElementById("feedbackBox").style.display = "none";
-}
-
-function submitFeedback() {
-    let msg = document.getElementById("feedbackText").value.trim();
-
-    if (msg === "") {
-        alert("Please type feedback first.");
-        return;
-}
-
-    document.getElementById("feedbackThanks").textContent =
-        "Thank you for your feedback!";
-
-    document.getElementById("feedbackText").value = "";
-
-    window.location.href =
-        "sms:" + CONTACT_ADDRESS + "?&body=" + encodeURIComponent("Captain Clue Feedback: " + msg);
-}
-
-    document.getElementById("feedbackThanks").textContent =
-        "Thank you for your feedback!";
-
-    document.getElementById("feedbackText").value = "";
-}
-
-function openContact() {
-    let msg = prompt("Type your message to Captain Clue:");
-
-    if (msg && msg.trim() !== "") {
-        window.location.href =
-            "sms:" + CONTACT_ADDRESS + "?&body=" + encodeURIComponent(msg);
-    }
-}
-
-/* 🌍 LANGUAGE */
+/* 🌍 LANGUAGE DATA */
 let currentLang = "en";
+let currentPage = "homePage";
 
 const uiText = {
     en: {
@@ -325,6 +303,16 @@ const uiText = {
         start: "Start Game",
         feedback: "💬 Feedback",
         contact: "📩 Contact Me",
+        feedbackTitle: "Feedback",
+        feedbackPlaceholder: "Type real feedback...",
+        feedbackSubmit: "Submit",
+        feedbackClose: "Close",
+        feedbackThanks: "Thank you for your feedback!",
+        feedbackTooShort: "Feedback is too short. Please write a real sentence.",
+        feedbackTooSimple: "That feedback is too short or does not explain anything.",
+        feedbackExplain: "Please explain what is good or what should be better.",
+        feedbackNotWebsite: "That does not seem like feedback about the website.",
+        contactPrompt: "Type your message to Captain Clue:",
         yes: "Yes",
         no: "No",
         dk: "Don't Know",
@@ -337,7 +325,9 @@ const uiText = {
         winnerTitle: "🏆 You Win!",
         winnerPrompt: "Who were you thinking of?",
         save: "Save",
-        guessStart: "🏴‍☠️ Are you thinking of "
+        guessStart: "🏴‍☠️ Are you thinking of ",
+        captainWins: "The Captain wins again! Huzzah! 🏴‍☠️",
+        savedStart: "Thank you for teaching Captain Clue a new YouTuber!\n\nSaved: "
     },
     es: {
         title: "Capitán Clue",
@@ -345,6 +335,16 @@ const uiText = {
         start: "Comenzar",
         feedback: "💬 Comentarios",
         contact: "📩 Contáctame",
+        feedbackTitle: "Comentarios",
+        feedbackPlaceholder: "Escribe un comentario real...",
+        feedbackSubmit: "Enviar",
+        feedbackClose: "Cerrar",
+        feedbackThanks: "¡Gracias por tus comentarios!",
+        feedbackTooShort: "El comentario es muy corto. Escribe una oración real.",
+        feedbackTooSimple: "Ese comentario es muy corto o no explica nada.",
+        feedbackExplain: "Explica qué es bueno o qué debería mejorar.",
+        feedbackNotWebsite: "Eso no parece ser un comentario sobre el sitio web.",
+        contactPrompt: "Escribe tu mensaje para Capitán Clue:",
         yes: "Sí",
         no: "No",
         dk: "No sé",
@@ -357,7 +357,9 @@ const uiText = {
         winnerTitle: "🏆 ¡Ganaste!",
         winnerPrompt: "¿En quién estabas pensando?",
         save: "Guardar",
-        guessStart: "🏴‍☠️ ¿Estás pensando en "
+        guessStart: "🏴‍☠️ ¿Estás pensando en ",
+        captainWins: "¡El Capitán gana otra vez! 🏴‍☠️",
+        savedStart: "¡Gracias por enseñar a Captain Clue un nuevo YouTuber!\n\nGuardado: "
     },
     fr: {
         title: "Capitaine Clue",
@@ -365,6 +367,16 @@ const uiText = {
         start: "Démarrer",
         feedback: "💬 Avis",
         contact: "📩 Contacte-moi",
+        feedbackTitle: "Avis",
+        feedbackPlaceholder: "Écris un vrai avis...",
+        feedbackSubmit: "Envoyer",
+        feedbackClose: "Fermer",
+        feedbackThanks: "Merci pour ton avis !",
+        feedbackTooShort: "L’avis est trop court. Écris une vraie phrase.",
+        feedbackTooSimple: "Cet avis est trop court ou n’explique rien.",
+        feedbackExplain: "Explique ce qui est bien ou ce qui devrait être amélioré.",
+        feedbackNotWebsite: "Cela ne semble pas être un avis sur le site.",
+        contactPrompt: "Écris ton message à Capitaine Clue :",
         yes: "Oui",
         no: "Non",
         dk: "Je ne sais pas",
@@ -377,7 +389,9 @@ const uiText = {
         winnerTitle: "🏆 Tu as gagné !",
         winnerPrompt: "À qui pensais-tu ?",
         save: "Sauvegarder",
-        guessStart: "🏴‍☠️ Est-ce que tu penses à "
+        guessStart: "🏴‍☠️ Est-ce que tu penses à ",
+        captainWins: "Le Capitaine gagne encore ! 🏴‍☠️",
+        savedStart: "Merci d’avoir appris un nouveau YouTuber à Captain Clue !\n\nSauvegardé : "
     },
     de: {
         title: "Captain Clue",
@@ -385,6 +399,16 @@ const uiText = {
         start: "Start",
         feedback: "💬 Feedback",
         contact: "📩 Kontakt",
+        feedbackTitle: "Feedback",
+        feedbackPlaceholder: "Schreibe echtes Feedback...",
+        feedbackSubmit: "Senden",
+        feedbackClose: "Schließen",
+        feedbackThanks: "Danke für dein Feedback!",
+        feedbackTooShort: "Das Feedback ist zu kurz. Bitte schreibe einen echten Satz.",
+        feedbackTooSimple: "Dieses Feedback ist zu kurz oder erklärt nichts.",
+        feedbackExplain: "Erkläre bitte, was gut ist oder was besser sein sollte.",
+        feedbackNotWebsite: "Das scheint kein Feedback zur Webseite zu sein.",
+        contactPrompt: "Schreibe deine Nachricht an Captain Clue:",
         yes: "Ja",
         no: "Nein",
         dk: "Weiß nicht",
@@ -397,7 +421,9 @@ const uiText = {
         winnerTitle: "🏆 Du hast gewonnen!",
         winnerPrompt: "An wen hast du gedacht?",
         save: "Speichern",
-        guessStart: "🏴‍☠️ Denkst du an "
+        guessStart: "🏴‍☠️ Denkst du an ",
+        captainWins: "Der Captain gewinnt schon wieder! 🏴‍☠️",
+        savedStart: "Danke, dass du Captain Clue einen neuen YouTuber beigebracht hast!\n\nGespeichert: "
     },
     it: {
         title: "Capitano Clue",
@@ -405,6 +431,16 @@ const uiText = {
         start: "Inizia",
         feedback: "💬 Feedback",
         contact: "📩 Contattami",
+        feedbackTitle: "Feedback",
+        feedbackPlaceholder: "Scrivi un vero feedback...",
+        feedbackSubmit: "Invia",
+        feedbackClose: "Chiudi",
+        feedbackThanks: "Grazie per il feedback!",
+        feedbackTooShort: "Il feedback è troppo corto. Scrivi una frase vera.",
+        feedbackTooSimple: "Questo feedback è troppo corto o non spiega nulla.",
+        feedbackExplain: "Spiega cosa è buono o cosa dovrebbe migliorare.",
+        feedbackNotWebsite: "Questo non sembra un feedback sul sito.",
+        contactPrompt: "Scrivi il tuo messaggio a Capitano Clue:",
         yes: "Sì",
         no: "No",
         dk: "Non lo so",
@@ -417,7 +453,9 @@ const uiText = {
         winnerTitle: "🏆 Hai vinto!",
         winnerPrompt: "A chi stavi pensando?",
         save: "Salva",
-        guessStart: "🏴‍☠️ Stai pensando a "
+        guessStart: "🏴‍☠️ Stai pensando a ",
+        captainWins: "Il Capitano vince ancora! 🏴‍☠️",
+        savedStart: "Grazie per aver insegnato a Captain Clue un nuovo YouTuber!\n\nSalvato: "
     },
     pt: {
         title: "Capitão Clue",
@@ -425,6 +463,16 @@ const uiText = {
         start: "Começar",
         feedback: "💬 Feedback",
         contact: "📩 Contato",
+        feedbackTitle: "Feedback",
+        feedbackPlaceholder: "Digite um feedback real...",
+        feedbackSubmit: "Enviar",
+        feedbackClose: "Fechar",
+        feedbackThanks: "Obrigado pelo feedback!",
+        feedbackTooShort: "O feedback é muito curto. Escreva uma frase de verdade.",
+        feedbackTooSimple: "Esse feedback é muito curto ou não explica nada.",
+        feedbackExplain: "Explique o que é bom ou o que deveria melhorar.",
+        feedbackNotWebsite: "Isso não parece ser feedback sobre o site.",
+        contactPrompt: "Digite sua mensagem para o Capitão Clue:",
         yes: "Sim",
         no: "Não",
         dk: "Não sei",
@@ -437,7 +485,9 @@ const uiText = {
         winnerTitle: "🏆 Você venceu!",
         winnerPrompt: "Em quem você estava pensando?",
         save: "Salvar",
-        guessStart: "🏴‍☠️ Você está pensando em "
+        guessStart: "🏴‍☠️ Você está pensando em ",
+        captainWins: "O Capitão venceu de novo! 🏴‍☠️",
+        savedStart: "Obrigado por ensinar um novo YouTuber ao Captain Clue!\n\nSalvo: "
     },
     ja: {
         title: "キャプテン・クルー",
@@ -445,6 +495,16 @@ const uiText = {
         start: "スタート",
         feedback: "💬 フィードバック",
         contact: "📩 連絡",
+        feedbackTitle: "フィードバック",
+        feedbackPlaceholder: "本当のフィードバックを書いてね...",
+        feedbackSubmit: "送信",
+        feedbackClose: "閉じる",
+        feedbackThanks: "フィードバックありがとう！",
+        feedbackTooShort: "短すぎます。ちゃんとした文を書いてね。",
+        feedbackTooSimple: "短すぎるか、何も説明していません。",
+        feedbackExplain: "何が良いか、何を直すべきかを書いてね。",
+        feedbackNotWebsite: "これはサイトについてのフィードバックに見えません。",
+        contactPrompt: "Captain Clueへのメッセージを書いてね：",
         yes: "はい",
         no: "いいえ",
         dk: "わからない",
@@ -457,7 +517,9 @@ const uiText = {
         winnerTitle: "🏆 勝ち！",
         winnerPrompt: "誰を考えていたの？",
         save: "保存",
-        guessStart: "🏴‍☠️ 考えているのは "
+        guessStart: "🏴‍☠️ 考えているのは ",
+        captainWins: "キャプテンがまた勝った！🏴‍☠️",
+        savedStart: "Captain Clueに新しいYouTuberを教えてくれてありがとう！\n\n保存："
     },
     ko: {
         title: "캡틴 클루",
@@ -465,6 +527,16 @@ const uiText = {
         start: "시작",
         feedback: "💬 피드백",
         contact: "📩 연락하기",
+        feedbackTitle: "피드백",
+        feedbackPlaceholder: "진짜 피드백을 입력하세요...",
+        feedbackSubmit: "제출",
+        feedbackClose: "닫기",
+        feedbackThanks: "피드백 감사합니다!",
+        feedbackTooShort: "피드백이 너무 짧아요. 진짜 문장으로 써 주세요.",
+        feedbackTooSimple: "그 피드백은 너무 짧거나 설명이 없어요.",
+        feedbackExplain: "무엇이 좋은지 또는 무엇을 고치면 좋을지 설명해 주세요.",
+        feedbackNotWebsite: "이 웹사이트에 대한 피드백 같지 않아요.",
+        contactPrompt: "캡틴 클루에게 보낼 메시지를 입력하세요:",
         yes: "예",
         no: "아니요",
         dk: "모르겠어요",
@@ -477,44 +549,690 @@ const uiText = {
         winnerTitle: "🏆 이겼어요!",
         winnerPrompt: "누구를 생각하고 있었나요?",
         save: "저장",
-        guessStart: "🏴‍☠️ 생각하고 있는 유튜버가 "
+        guessStart: "🏴‍☠️ 생각하고 있는 유튜버가 ",
+        captainWins: "캡틴이 또 이겼어요! 🏴‍☠️",
+        savedStart: "Captain Clue에게 새 유튜버를 알려줘서 고마워요!\n\n저장됨: "
     }
 };
 
-function setLang() {
-    currentLang = document.getElementById("lang").value;
-    updateLanguage();
+const questionsByLang = {
+    en: [
+        "ARE YOU READY TO PLAY GUESS THE YOUTUBER!?!",
+        "Did your YouTuber become famous before 2020?",
+        "Did your YouTuber become famous after 2020?",
+        "Does your YouTuber have a verified channel?",
+        "Has your YouTuber ever changed their profile picture?",
+        "Does your YouTuber usually upload in English?",
+        "Does your YouTuber have an accent that fans recognize?",
+        "Does your YouTuber use custom thumbnails?",
+        "Does your YouTuber appear in every video?",
+        "Does your YouTuber sometimes let friends take over videos?",
+        "Does your YouTuber own more than one channel?",
+        "Has your YouTuber ever built something huge?",
+        "Has your YouTuber ever survived 100 days in a game?",
+        "Has your YouTuber ever completed a challenge series?",
+        "Has your YouTuber ever competed against friends?",
+        "Has your YouTuber ever hidden clues in videos?",
+        "Has your YouTuber ever done a giveaway?",
+        "Has your YouTuber ever made a charity video?",
+        "Has your YouTuber ever done a subscriber special?",
+        "Has your YouTuber ever celebrated a milestone on camera?",
+        "Has your YouTuber ever broken a world record?",
+        "Does your YouTuber own custom merchandise?",
+        "Does your YouTuber have their own brand?",
+        "Does your YouTuber have a famous pet?",
+        "Does your YouTuber often wear the same color?",
+        "Does your YouTuber use a cartoon version of themselves?",
+        "Does your YouTuber use a custom avatar?",
+        "Does your YouTuber appear in animated videos?",
+        "Does your YouTuber make content with siblings?",
+        "Does your YouTuber make content with their spouse?",
+        "Does your YouTuber make content with their parents?",
+        "Does your YouTuber usually smile in thumbnails?",
+        "Does your YouTuber make dramatic thumbnails?",
+        "Does your YouTuber use arrows in thumbnails?",
+        "Does your YouTuber use circles in thumbnails?",
+        "Does your YouTuber play games competitively?",
+        "Does your YouTuber play games casually?",
+        "Does your YouTuber make challenge content?",
+        "Does your YouTuber make experiment content?",
+        "Does your YouTuber make educational content?",
+        "Does your YouTuber make comedy content?",
+        "Would elementary school students know this YouTuber?",
+        "Would middle school students know this YouTuber?",
+        "Would high school students know this YouTuber?",
+        "Would college students know this YouTuber?",
+        "Would gamers recognize this YouTuber?",
+        "Would non-gamers recognize this YouTuber?",
+        "Does your YouTuber have a famous catchphrase?",
+        "Does your YouTuber have a signature laugh?",
+        "Does your YouTuber have a recognizable logo?",
+        "Does your YouTuber have a recognizable intro?",
+        "Has your YouTuber ever visited another continent?",
+        "Has your YouTuber ever filmed on a beach?",
+        "Has your YouTuber ever filmed in the snow?",
+        "Has your YouTuber ever filmed in a desert?",
+        "Has your YouTuber ever filmed on a boat?",
+        "Has your YouTuber ever filmed in an airplane?",
+        "Has your YouTuber ever filmed at a theme park?",
+        "Has your YouTuber ever filmed in a stadium?",
+        "Has your YouTuber ever filmed at a convention?",
+        "Has your YouTuber ever filmed in a hotel?",
+        "Does your YouTuber own a custom PC?",
+        "Does your YouTuber own multiple monitors?",
+        "Does your YouTuber use RGB lights?",
+        "Does your YouTuber have a custom desk setup?",
+        "Does your YouTuber have a gaming room?",
+        "Does your YouTuber have a studio room?",
+        "Does your YouTuber record with friends nearby?",
+        "Does your YouTuber record alone?",
+        "Does your YouTuber use a professional microphone?",
+        "Does your YouTuber use a webcam regularly?"
+    ],
+
+    es: [
+        "¿ESTÁS LISTO PARA JUGAR ADIVINA EL YOUTUBER!?!",
+        "¿Tu YouTuber se hizo famoso antes de 2020?",
+        "¿Tu YouTuber se hizo famoso después de 2020?",
+        "¿Tu YouTuber tiene un canal verificado?",
+        "¿Tu YouTuber alguna vez cambió su foto de perfil?",
+        "¿Tu YouTuber normalmente sube videos en inglés?",
+        "¿Tu YouTuber tiene un acento que los fans reconocen?",
+        "¿Tu YouTuber usa miniaturas personalizadas?",
+        "¿Tu YouTuber aparece en todos los videos?",
+        "¿Tu YouTuber a veces deja que sus amigos tomen el control de los videos?",
+        "¿Tu YouTuber tiene más de un canal?",
+        "¿Tu YouTuber alguna vez construyó algo enorme?",
+        "¿Tu YouTuber alguna vez sobrevivió 100 días en un juego?",
+        "¿Tu YouTuber alguna vez completó una serie de retos?",
+        "¿Tu YouTuber alguna vez compitió contra amigos?",
+        "¿Tu YouTuber alguna vez escondió pistas en videos?",
+        "¿Tu YouTuber alguna vez hizo un sorteo?",
+        "¿Tu YouTuber alguna vez hizo un video de caridad?",
+        "¿Tu YouTuber alguna vez hizo un especial de suscriptores?",
+        "¿Tu YouTuber alguna vez celebró una meta en cámara?",
+        "¿Tu YouTuber alguna vez rompió un récord mundial?",
+        "¿Tu YouTuber tiene mercancía personalizada?",
+        "¿Tu YouTuber tiene su propia marca?",
+        "¿Tu YouTuber tiene una mascota famosa?",
+        "¿Tu YouTuber suele usar el mismo color?",
+        "¿Tu YouTuber usa una versión caricatura de sí mismo?",
+        "¿Tu YouTuber usa un avatar personalizado?",
+        "¿Tu YouTuber aparece en videos animados?",
+        "¿Tu YouTuber hace contenido con hermanos?",
+        "¿Tu YouTuber hace contenido con su esposo o esposa?",
+        "¿Tu YouTuber hace contenido con sus padres?",
+        "¿Tu YouTuber suele sonreír en las miniaturas?",
+        "¿Tu YouTuber hace miniaturas dramáticas?",
+        "¿Tu YouTuber usa flechas en las miniaturas?",
+        "¿Tu YouTuber usa círculos en las miniaturas?",
+        "¿Tu YouTuber juega videojuegos de forma competitiva?",
+        "¿Tu YouTuber juega videojuegos casualmente?",
+        "¿Tu YouTuber hace contenido de retos?",
+        "¿Tu YouTuber hace contenido de experimentos?",
+        "¿Tu YouTuber hace contenido educativo?",
+        "¿Tu YouTuber hace contenido de comedia?",
+        "¿Los estudiantes de primaria conocerían a este YouTuber?",
+        "¿Los estudiantes de secundaria conocerían a este YouTuber?",
+        "¿Los estudiantes de preparatoria conocerían a este YouTuber?",
+        "¿Los estudiantes universitarios conocerían a este YouTuber?",
+        "¿Los gamers reconocerían a este YouTuber?",
+        "¿Las personas que no juegan videojuegos reconocerían a este YouTuber?",
+        "¿Tu YouTuber tiene una frase famosa?",
+        "¿Tu YouTuber tiene una risa característica?",
+        "¿Tu YouTuber tiene un logo reconocible?",
+        "¿Tu YouTuber tiene una intro reconocible?",
+        "¿Tu YouTuber alguna vez visitó otro continente?",
+        "¿Tu YouTuber alguna vez grabó en una playa?",
+        "¿Tu YouTuber alguna vez grabó en la nieve?",
+        "¿Tu YouTuber alguna vez grabó en un desierto?",
+        "¿Tu YouTuber alguna vez grabó en un barco?",
+        "¿Tu YouTuber alguna vez grabó en un avión?",
+        "¿Tu YouTuber alguna vez grabó en un parque temático?",
+        "¿Tu YouTuber alguna vez grabó en un estadio?",
+        "¿Tu YouTuber alguna vez grabó en una convención?",
+        "¿Tu YouTuber alguna vez grabó en un hotel?",
+        "¿Tu YouTuber tiene una PC personalizada?",
+        "¿Tu YouTuber tiene varios monitores?",
+        "¿Tu YouTuber usa luces RGB?",
+        "¿Tu YouTuber tiene un escritorio personalizado?",
+        "¿Tu YouTuber tiene una sala de juegos?",
+        "¿Tu YouTuber tiene un estudio?",
+        "¿Tu YouTuber graba con amigos cerca?",
+        "¿Tu YouTuber graba solo?",
+        "¿Tu YouTuber usa un micrófono profesional?",
+        "¿Tu YouTuber usa cámara web regularmente?"
+    ],
+
+    fr: [
+        "ES-TU PRÊT À JOUER À DEVINE LE YOUTUBER !?!",
+        "Ton YouTuber est-il devenu célèbre avant 2020 ?",
+        "Ton YouTuber est-il devenu célèbre après 2020 ?",
+        "Ton YouTuber a-t-il une chaîne vérifiée ?",
+        "Ton YouTuber a-t-il déjà changé sa photo de profil ?",
+        "Ton YouTuber publie-t-il généralement en anglais ?",
+        "Ton YouTuber a-t-il un accent que les fans reconnaissent ?",
+        "Ton YouTuber utilise-t-il des miniatures personnalisées ?",
+        "Ton YouTuber apparaît-il dans chaque vidéo ?",
+        "Ton YouTuber laisse-t-il parfois des amis prendre le contrôle des vidéos ?",
+        "Ton YouTuber possède-t-il plus d’une chaîne ?",
+        "Ton YouTuber a-t-il déjà construit quelque chose d’énorme ?",
+        "Ton YouTuber a-t-il déjà survécu 100 jours dans un jeu ?",
+        "Ton YouTuber a-t-il déjà terminé une série de défis ?",
+        "Ton YouTuber a-t-il déjà affronté des amis ?",
+        "Ton YouTuber a-t-il déjà caché des indices dans ses vidéos ?",
+        "Ton YouTuber a-t-il déjà fait un concours cadeau ?",
+        "Ton YouTuber a-t-il déjà fait une vidéo caritative ?",
+        "Ton YouTuber a-t-il déjà fait une vidéo spéciale abonnés ?",
+        "Ton YouTuber a-t-il déjà célébré une étape en vidéo ?",
+        "Ton YouTuber a-t-il déjà battu un record du monde ?",
+        "Ton YouTuber vend-il des produits personnalisés ?",
+        "Ton YouTuber a-t-il sa propre marque ?",
+        "Ton YouTuber a-t-il un animal célèbre ?",
+        "Ton YouTuber porte-t-il souvent la même couleur ?",
+        "Ton YouTuber utilise-t-il une version dessin animé de lui-même ?",
+        "Ton YouTuber utilise-t-il un avatar personnalisé ?",
+        "Ton YouTuber apparaît-il dans des vidéos animées ?",
+        "Ton YouTuber fait-il du contenu avec ses frères ou sœurs ?",
+        "Ton YouTuber fait-il du contenu avec son conjoint ?",
+        "Ton YouTuber fait-il du contenu avec ses parents ?",
+        "Ton YouTuber sourit-il souvent dans les miniatures ?",
+        "Ton YouTuber fait-il des miniatures dramatiques ?",
+        "Ton YouTuber utilise-t-il des flèches dans les miniatures ?",
+        "Ton YouTuber utilise-t-il des cercles dans les miniatures ?",
+        "Ton YouTuber joue-t-il de façon compétitive ?",
+        "Ton YouTuber joue-t-il de façon détendue ?",
+        "Ton YouTuber fait-il du contenu de défis ?",
+        "Ton YouTuber fait-il du contenu d’expériences ?",
+        "Ton YouTuber fait-il du contenu éducatif ?",
+        "Ton YouTuber fait-il du contenu comique ?",
+        "Des élèves d’école primaire connaîtraient-ils ce YouTuber ?",
+        "Des collégiens connaîtraient-ils ce YouTuber ?",
+        "Des lycéens connaîtraient-ils ce YouTuber ?",
+        "Des étudiants connaîtraient-ils ce YouTuber ?",
+        "Les gamers reconnaîtraient-ils ce YouTuber ?",
+        "Les non-gamers reconnaîtraient-ils ce YouTuber ?",
+        "Ton YouTuber a-t-il une phrase célèbre ?",
+        "Ton YouTuber a-t-il un rire reconnaissable ?",
+        "Ton YouTuber a-t-il un logo reconnaissable ?",
+        "Ton YouTuber a-t-il une intro reconnaissable ?",
+        "Ton YouTuber a-t-il déjà visité un autre continent ?",
+        "Ton YouTuber a-t-il déjà filmé sur une plage ?",
+        "Ton YouTuber a-t-il déjà filmé dans la neige ?",
+        "Ton YouTuber a-t-il déjà filmé dans un désert ?",
+        "Ton YouTuber a-t-il déjà filmé sur un bateau ?",
+        "Ton YouTuber a-t-il déjà filmé dans un avion ?",
+        "Ton YouTuber a-t-il déjà filmé dans un parc d’attractions ?",
+        "Ton YouTuber a-t-il déjà filmé dans un stade ?",
+        "Ton YouTuber a-t-il déjà filmé à une convention ?",
+        "Ton YouTuber a-t-il déjà filmé dans un hôtel ?",
+        "Ton YouTuber possède-t-il un PC personnalisé ?",
+        "Ton YouTuber possède-t-il plusieurs écrans ?",
+        "Ton YouTuber utilise-t-il des lumières RGB ?",
+        "Ton YouTuber a-t-il un bureau personnalisé ?",
+        "Ton YouTuber a-t-il une salle de jeu ?",
+        "Ton YouTuber a-t-il un studio ?",
+        "Ton YouTuber enregistre-t-il avec des amis à proximité ?",
+        "Ton YouTuber enregistre-t-il seul ?",
+        "Ton YouTuber utilise-t-il un micro professionnel ?",
+        "Ton YouTuber utilise-t-il régulièrement une webcam ?"
+    ],
+
+    de: [
+        "BIST DU BEREIT, RATE DEN YOUTUBER ZU SPIELEN!?!",
+        "Wurde dein YouTuber vor 2020 berühmt?",
+        "Wurde dein YouTuber nach 2020 berühmt?",
+        "Hat dein YouTuber einen verifizierten Kanal?",
+        "Hat dein YouTuber jemals sein Profilbild geändert?",
+        "Lädt dein YouTuber normalerweise auf Englisch hoch?",
+        "Hat dein YouTuber einen Akzent, den Fans erkennen?",
+        "Benutzt dein YouTuber eigene Thumbnails?",
+        "Erscheint dein YouTuber in jedem Video?",
+        "Lässt dein YouTuber manchmal Freunde Videos übernehmen?",
+        "Besitzt dein YouTuber mehr als einen Kanal?",
+        "Hat dein YouTuber jemals etwas Riesiges gebaut?",
+        "Hat dein YouTuber jemals 100 Tage in einem Spiel überlebt?",
+        "Hat dein YouTuber jemals eine Challenge-Serie beendet?",
+        "Hat dein YouTuber jemals gegen Freunde gespielt?",
+        "Hat dein YouTuber jemals Hinweise in Videos versteckt?",
+        "Hat dein YouTuber jemals ein Giveaway gemacht?",
+        "Hat dein YouTuber jemals ein Wohltätigkeitsvideo gemacht?",
+        "Hat dein YouTuber jemals ein Abonnenten-Special gemacht?",
+        "Hat dein YouTuber jemals einen Meilenstein vor der Kamera gefeiert?",
+        "Hat dein YouTuber jemals einen Weltrekord gebrochen?",
+        "Besitzt dein YouTuber eigene Merchandise-Artikel?",
+        "Hat dein YouTuber eine eigene Marke?",
+        "Hat dein YouTuber ein berühmtes Haustier?",
+        "Trägt dein YouTuber oft dieselbe Farbe?",
+        "Benutzt dein YouTuber eine Cartoon-Version von sich selbst?",
+        "Benutzt dein YouTuber einen eigenen Avatar?",
+        "Erscheint dein YouTuber in animierten Videos?",
+        "Macht dein YouTuber Inhalte mit Geschwistern?",
+        "Macht dein YouTuber Inhalte mit seinem Ehepartner?",
+        "Macht dein YouTuber Inhalte mit seinen Eltern?",
+        "Lächelt dein YouTuber meistens in Thumbnails?",
+        "Macht dein YouTuber dramatische Thumbnails?",
+        "Benutzt dein YouTuber Pfeile in Thumbnails?",
+        "Benutzt dein YouTuber Kreise in Thumbnails?",
+        "Spielt dein YouTuber wettbewerbsorientiert?",
+        "Spielt dein YouTuber eher locker?",
+        "Macht dein YouTuber Challenge-Inhalte?",
+        "Macht dein YouTuber Experiment-Inhalte?",
+        "Macht dein YouTuber Bildungsinhalte?",
+        "Macht dein YouTuber Comedy-Inhalte?",
+        "Würden Grundschüler diesen YouTuber kennen?",
+        "Würden Schüler der Mittelstufe diesen YouTuber kennen?",
+        "Würden Highschool-Schüler diesen YouTuber kennen?",
+        "Würden Studenten diesen YouTuber kennen?",
+        "Würden Gamer diesen YouTuber erkennen?",
+        "Würden Nicht-Gamer diesen YouTuber erkennen?",
+        "Hat dein YouTuber einen berühmten Spruch?",
+        "Hat dein YouTuber ein besonderes Lachen?",
+        "Hat dein YouTuber ein erkennbares Logo?",
+        "Hat dein YouTuber ein erkennbares Intro?",
+        "Hat dein YouTuber jemals einen anderen Kontinent besucht?",
+        "Hat dein YouTuber jemals an einem Strand gefilmt?",
+        "Hat dein YouTuber jemals im Schnee gefilmt?",
+        "Hat dein YouTuber jemals in einer Wüste gefilmt?",
+        "Hat dein YouTuber jemals auf einem Boot gefilmt?",
+        "Hat dein YouTuber jemals in einem Flugzeug gefilmt?",
+        "Hat dein YouTuber jemals in einem Freizeitpark gefilmt?",
+        "Hat dein YouTuber jemals in einem Stadion gefilmt?",
+        "Hat dein YouTuber jemals auf einer Convention gefilmt?",
+        "Hat dein YouTuber jemals in einem Hotel gefilmt?",
+        "Besitzt dein YouTuber einen eigenen PC?",
+        "Besitzt dein YouTuber mehrere Monitore?",
+        "Benutzt dein YouTuber RGB-Lichter?",
+        "Hat dein YouTuber einen eigenen Schreibtisch-Aufbau?",
+        "Hat dein YouTuber ein Gaming-Zimmer?",
+        "Hat dein YouTuber ein Studio-Zimmer?",
+        "Nimmt dein YouTuber mit Freunden in der Nähe auf?",
+        "Nimmt dein YouTuber alleine auf?",
+        "Benutzt dein YouTuber ein professionelles Mikrofon?",
+        "Benutzt dein YouTuber regelmäßig eine Webcam?"
+    ],
+
+    it: [
+        "SEI PRONTO A GIOCARE A INDOVINA LO YOUTUBER!?!",
+        "Il tuo YouTuber è diventato famoso prima del 2020?",
+        "Il tuo YouTuber è diventato famoso dopo il 2020?",
+        "Il tuo YouTuber ha un canale verificato?",
+        "Il tuo YouTuber ha mai cambiato immagine del profilo?",
+        "Il tuo YouTuber di solito carica video in inglese?",
+        "Il tuo YouTuber ha un accento che i fan riconoscono?",
+        "Il tuo YouTuber usa miniature personalizzate?",
+        "Il tuo YouTuber appare in ogni video?",
+        "Il tuo YouTuber a volte lascia che gli amici prendano il controllo dei video?",
+        "Il tuo YouTuber possiede più di un canale?",
+        "Il tuo YouTuber ha mai costruito qualcosa di enorme?",
+        "Il tuo YouTuber è mai sopravvissuto 100 giorni in un gioco?",
+        "Il tuo YouTuber ha mai completato una serie di sfide?",
+        "Il tuo YouTuber ha mai gareggiato contro amici?",
+        "Il tuo YouTuber ha mai nascosto indizi nei video?",
+        "Il tuo YouTuber ha mai fatto un giveaway?",
+        "Il tuo YouTuber ha mai fatto un video di beneficenza?",
+        "Il tuo YouTuber ha mai fatto uno speciale per gli iscritti?",
+        "Il tuo YouTuber ha mai celebrato un traguardo in video?",
+        "Il tuo YouTuber ha mai battuto un record mondiale?",
+        "Il tuo YouTuber possiede merchandise personalizzato?",
+        "Il tuo YouTuber ha un proprio brand?",
+        "Il tuo YouTuber ha un animale famoso?",
+        "Il tuo YouTuber indossa spesso lo stesso colore?",
+        "Il tuo YouTuber usa una versione cartoon di sé stesso?",
+        "Il tuo YouTuber usa un avatar personalizzato?",
+        "Il tuo YouTuber appare in video animati?",
+        "Il tuo YouTuber fa contenuti con fratelli o sorelle?",
+        "Il tuo YouTuber fa contenuti con il coniuge?",
+        "Il tuo YouTuber fa contenuti con i genitori?",
+        "Il tuo YouTuber sorride spesso nelle miniature?",
+        "Il tuo YouTuber fa miniature drammatiche?",
+        "Il tuo YouTuber usa frecce nelle miniature?",
+        "Il tuo YouTuber usa cerchi nelle miniature?",
+        "Il tuo YouTuber gioca in modo competitivo?",
+        "Il tuo YouTuber gioca in modo casual?",
+        "Il tuo YouTuber fa contenuti di sfide?",
+        "Il tuo YouTuber fa contenuti di esperimenti?",
+        "Il tuo YouTuber fa contenuti educativi?",
+        "Il tuo YouTuber fa contenuti comici?",
+        "Gli studenti delle elementari conoscerebbero questo YouTuber?",
+        "Gli studenti delle medie conoscerebbero questo YouTuber?",
+        "Gli studenti delle superiori conoscerebbero questo YouTuber?",
+        "Gli studenti universitari conoscerebbero questo YouTuber?",
+        "I gamer riconoscerebbero questo YouTuber?",
+        "I non gamer riconoscerebbero questo YouTuber?",
+        "Il tuo YouTuber ha una frase famosa?",
+        "Il tuo YouTuber ha una risata riconoscibile?",
+        "Il tuo YouTuber ha un logo riconoscibile?",
+        "Il tuo YouTuber ha un’intro riconoscibile?",
+        "Il tuo YouTuber ha mai visitato un altro continente?",
+        "Il tuo YouTuber ha mai filmato su una spiaggia?",
+        "Il tuo YouTuber ha mai filmato nella neve?",
+        "Il tuo YouTuber ha mai filmato in un deserto?",
+        "Il tuo YouTuber ha mai filmato su una barca?",
+        "Il tuo YouTuber ha mai filmato su un aereo?",
+        "Il tuo YouTuber ha mai filmato in un parco divertimenti?",
+        "Il tuo YouTuber ha mai filmato in uno stadio?",
+        "Il tuo YouTuber ha mai filmato a una convention?",
+        "Il tuo YouTuber ha mai filmato in un hotel?",
+        "Il tuo YouTuber possiede un PC personalizzato?",
+        "Il tuo YouTuber possiede più monitor?",
+        "Il tuo YouTuber usa luci RGB?",
+        "Il tuo YouTuber ha una scrivania personalizzata?",
+        "Il tuo YouTuber ha una stanza da gaming?",
+        "Il tuo YouTuber ha uno studio?",
+        "Il tuo YouTuber registra con amici vicini?",
+        "Il tuo YouTuber registra da solo?",
+        "Il tuo YouTuber usa un microfono professionale?",
+        "Il tuo YouTuber usa regolarmente una webcam?"
+    ],
+
+    pt: [
+        "VOCÊ ESTÁ PRONTO PARA JOGAR ADIVINHE O YOUTUBER!?!",
+        "Seu YouTuber ficou famoso antes de 2020?",
+        "Seu YouTuber ficou famoso depois de 2020?",
+        "Seu YouTuber tem um canal verificado?",
+        "Seu YouTuber já mudou a foto de perfil?",
+        "Seu YouTuber geralmente posta em inglês?",
+        "Seu YouTuber tem um sotaque que os fãs reconhecem?",
+        "Seu YouTuber usa thumbnails personalizadas?",
+        "Seu YouTuber aparece em todos os vídeos?",
+        "Seu YouTuber às vezes deixa amigos comandarem os vídeos?",
+        "Seu YouTuber tem mais de um canal?",
+        "Seu YouTuber já construiu algo enorme?",
+        "Seu YouTuber já sobreviveu 100 dias em um jogo?",
+        "Seu YouTuber já completou uma série de desafios?",
+        "Seu YouTuber já competiu contra amigos?",
+        "Seu YouTuber já escondeu pistas nos vídeos?",
+        "Seu YouTuber já fez um sorteio?",
+        "Seu YouTuber já fez um vídeo de caridade?",
+        "Seu YouTuber já fez um especial de inscritos?",
+        "Seu YouTuber já comemorou uma meta na câmera?",
+        "Seu YouTuber já quebrou um recorde mundial?",
+        "Seu YouTuber tem produtos personalizados?",
+        "Seu YouTuber tem sua própria marca?",
+        "Seu YouTuber tem um pet famoso?",
+        "Seu YouTuber costuma usar a mesma cor?",
+        "Seu YouTuber usa uma versão cartoon de si mesmo?",
+        "Seu YouTuber usa um avatar personalizado?",
+        "Seu YouTuber aparece em vídeos animados?",
+        "Seu YouTuber faz conteúdo com irmãos?",
+        "Seu YouTuber faz conteúdo com esposo ou esposa?",
+        "Seu YouTuber faz conteúdo com os pais?",
+        "Seu YouTuber geralmente sorri nas thumbnails?",
+        "Seu YouTuber faz thumbnails dramáticas?",
+        "Seu YouTuber usa setas nas thumbnails?",
+        "Seu YouTuber usa círculos nas thumbnails?",
+        "Seu YouTuber joga competitivamente?",
+        "Seu YouTuber joga casualmente?",
+        "Seu YouTuber faz conteúdo de desafios?",
+        "Seu YouTuber faz conteúdo de experimentos?",
+        "Seu YouTuber faz conteúdo educativo?",
+        "Seu YouTuber faz conteúdo de comédia?",
+        "Alunos do ensino fundamental conheceriam esse YouTuber?",
+        "Alunos do ensino médio conheceriam esse YouTuber?",
+        "Alunos mais velhos conheceriam esse YouTuber?",
+        "Universitários conheceriam esse YouTuber?",
+        "Gamers reconheceriam esse YouTuber?",
+        "Pessoas que não jogam reconheceriam esse YouTuber?",
+        "Seu YouTuber tem uma frase famosa?",
+        "Seu YouTuber tem uma risada marcante?",
+        "Seu YouTuber tem um logo reconhecível?",
+        "Seu YouTuber tem uma intro reconhecível?",
+        "Seu YouTuber já visitou outro continente?",
+        "Seu YouTuber já gravou em uma praia?",
+        "Seu YouTuber já gravou na neve?",
+        "Seu YouTuber já gravou em um deserto?",
+        "Seu YouTuber já gravou em um barco?",
+        "Seu YouTuber já gravou em um avião?",
+        "Seu YouTuber já gravou em um parque temático?",
+        "Seu YouTuber já gravou em um estádio?",
+        "Seu YouTuber já gravou em uma convenção?",
+        "Seu YouTuber já gravou em um hotel?",
+        "Seu YouTuber tem um PC personalizado?",
+        "Seu YouTuber tem vários monitores?",
+        "Seu YouTuber usa luzes RGB?",
+        "Seu YouTuber tem uma mesa personalizada?",
+        "Seu YouTuber tem uma sala de jogos?",
+        "Seu YouTuber tem um estúdio?",
+        "Seu YouTuber grava com amigos por perto?",
+        "Seu YouTuber grava sozinho?",
+        "Seu YouTuber usa um microfone profissional?",
+        "Seu YouTuber usa webcam regularmente?"
+    ],
+
+    ja: [
+        "ユーチューバー当てゲームを始める準備はできた！？",
+        "そのYouTuberは2020年より前に有名になりましたか？",
+        "そのYouTuberは2020年より後に有名になりましたか？",
+        "そのYouTuberのチャンネルは認証されていますか？",
+        "そのYouTuberはプロフィール画像を変えたことがありますか？",
+        "そのYouTuberはふだん英語で投稿しますか？",
+        "そのYouTuberにはファンがわかるアクセントがありますか？",
+        "そのYouTuberは特別なサムネイルを使いますか？",
+        "そのYouTuberは毎回動画に出ていますか？",
+        "そのYouTuberは友だちに動画を任せることがありますか？",
+        "そのYouTuberは2つ以上のチャンネルを持っていますか？",
+        "そのYouTuberは巨大なものを作ったことがありますか？",
+        "そのYouTuberはゲームで100日生き残ったことがありますか？",
+        "そのYouTuberはチャレンジシリーズを完了したことがありますか？",
+        "そのYouTuberは友だちと対決したことがありますか？",
+        "そのYouTuberは動画にヒントを隠したことがありますか？",
+        "そのYouTuberはプレゼント企画をしたことがありますか？",
+        "そのYouTuberはチャリティー動画を作ったことがありますか？",
+        "そのYouTuberは登録者記念動画を作ったことがありますか？",
+        "そのYouTuberは大きな達成をカメラで祝ったことがありますか？",
+        "そのYouTuberは世界記録を破ったことがありますか？",
+        "そのYouTuberはオリジナルグッズを持っていますか？",
+        "そのYouTuberは自分のブランドを持っていますか？",
+        "そのYouTuberには有名なペットがいますか？",
+        "そのYouTuberはよく同じ色を身につけますか？",
+        "そのYouTuberは自分のカートゥーン版を使いますか？",
+        "そのYouTuberは特別なアバターを使いますか？",
+        "そのYouTuberはアニメーション動画に出ますか？",
+        "そのYouTuberは兄弟姉妹と動画を作りますか？",
+        "そのYouTuberは配偶者と動画を作りますか？",
+        "そのYouTuberは親と動画を作りますか？",
+        "そのYouTuberはサムネイルでよく笑っていますか？",
+        "そのYouTuberはドラマチックなサムネイルを作りますか？",
+        "そのYouTuberはサムネイルに矢印を使いますか？",
+        "そのYouTuberはサムネイルに丸を使いますか？",
+        "そのYouTuberは競争的にゲームをしますか？",
+        "そのYouTuberは気軽にゲームをしますか？",
+        "そのYouTuberはチャレンジ動画を作りますか？",
+        "そのYouTuberは実験動画を作りますか？",
+        "そのYouTuberは教育系の動画を作りますか？",
+        "そのYouTuberはコメディ動画を作りますか？",
+        "小学生はそのYouTuberを知っていますか？",
+        "中学生はそのYouTuberを知っていますか？",
+        "高校生はそのYouTuberを知っていますか？",
+        "大学生はそのYouTuberを知っていますか？",
+        "ゲーマーはそのYouTuberを知っていますか？",
+        "ゲームをしない人もそのYouTuberを知っていますか？",
+        "そのYouTuberには有名な決め台詞がありますか？",
+        "そのYouTuberには特徴的な笑い方がありますか？",
+        "そのYouTuberにはわかりやすいロゴがありますか？",
+        "そのYouTuberにはわかりやすいイントロがありますか？",
+        "そのYouTuberは別の大陸に行ったことがありますか？",
+        "そのYouTuberはビーチで撮影したことがありますか？",
+        "そのYouTuberは雪の中で撮影したことがありますか？",
+        "そのYouTuberは砂漠で撮影したことがありますか？",
+        "そのYouTuberは船で撮影したことがありますか？",
+        "そのYouTuberは飛行機で撮影したことがありますか？",
+        "そのYouTuberはテーマパークで撮影したことがありますか？",
+        "そのYouTuberはスタジアムで撮影したことがありますか？",
+        "そのYouTuberはイベント会場で撮影したことがありますか？",
+        "そのYouTuberはホテルで撮影したことがありますか？",
+        "そのYouTuberは特別なPCを持っていますか？",
+        "そのYouTuberは複数のモニターを持っていますか？",
+        "そのYouTuberはRGBライトを使いますか？",
+        "そのYouTuberは特別な机セットアップを持っていますか？",
+        "そのYouTuberはゲーム部屋を持っていますか？",
+        "そのYouTuberはスタジオ部屋を持っていますか？",
+        "そのYouTuberは近くに友だちがいる状態で録画しますか？",
+        "そのYouTuberは一人で録画しますか？",
+        "そのYouTuberはプロ用マイクを使いますか？",
+        "そのYouTuberはよくウェブカメラを使いますか？"
+    ],
+
+    ko: [
+        "유튜버 맞히기 게임을 할 준비가 됐나요!?!",
+        "그 유튜버는 2020년 전에 유명해졌나요?",
+        "그 유튜버는 2020년 후에 유명해졌나요?",
+        "그 유튜버는 인증된 채널이 있나요?",
+        "그 유튜버는 프로필 사진을 바꾼 적이 있나요?",
+        "그 유튜버는 보통 영어로 영상을 올리나요?",
+        "그 유튜버는 팬들이 알아보는 억양이 있나요?",
+        "그 유튜버는 직접 만든 썸네일을 사용하나요?",
+        "그 유튜버는 모든 영상에 나오나요?",
+        "그 유튜버는 가끔 친구들이 영상을 대신 진행하게 하나요?",
+        "그 유튜버는 채널이 하나보다 많나요?",
+        "그 유튜버는 엄청 큰 것을 만든 적이 있나요?",
+        "그 유튜버는 게임에서 100일 동안 살아남은 적이 있나요?",
+        "그 유튜버는 챌린지 시리즈를 완료한 적이 있나요?",
+        "그 유튜버는 친구들과 대결한 적이 있나요?",
+        "그 유튜버는 영상에 단서를 숨긴 적이 있나요?",
+        "그 유튜버는 경품 이벤트를 한 적이 있나요?",
+        "그 유튜버는 자선 영상을 만든 적이 있나요?",
+        "그 유튜버는 구독자 특별 영상을 만든 적이 있나요?",
+        "그 유튜버는 큰 목표 달성을 카메라 앞에서 축하한 적이 있나요?",
+        "그 유튜버는 세계 기록을 깬 적이 있나요?",
+        "그 유튜버는 맞춤 굿즈가 있나요?",
+        "그 유튜버는 자기 브랜드가 있나요?",
+        "그 유튜버는 유명한 반려동물이 있나요?",
+        "그 유튜버는 자주 같은 색을 입나요?",
+        "그 유튜버는 자기의 만화 버전을 사용하나요?",
+        "그 유튜버는 맞춤 아바타를 사용하나요?",
+        "그 유튜버는 애니메이션 영상에 나오나요?",
+        "그 유튜버는 형제자매와 콘텐츠를 만드나요?",
+        "그 유튜버는 배우자와 콘텐츠를 만드나요?",
+        "그 유튜버는 부모님과 콘텐츠를 만드나요?",
+        "그 유튜버는 썸네일에서 보통 웃고 있나요?",
+        "그 유튜버는 극적인 썸네일을 만드나요?",
+        "그 유튜버는 썸네일에 화살표를 사용하나요?",
+        "그 유튜버는 썸네일에 동그라미를 사용하나요?",
+        "그 유튜버는 경쟁적으로 게임을 하나요?",
+        "그 유튜버는 편하게 게임을 하나요?",
+        "그 유튜버는 챌린지 콘텐츠를 만드나요?",
+        "그 유튜버는 실험 콘텐츠를 만드나요?",
+        "그 유튜버는 교육 콘텐츠를 만드나요?",
+        "그 유튜버는 코미디 콘텐츠를 만드나요?",
+        "초등학생들이 이 유튜버를 알까요?",
+        "중학생들이 이 유튜버를 알까요?",
+        "고등학생들이 이 유튜버를 알까요?",
+        "대학생들이 이 유튜버를 알까요?",
+        "게이머들이 이 유튜버를 알아볼까요?",
+        "게임을 안 하는 사람들도 이 유튜버를 알아볼까요?",
+        "그 유튜버는 유명한 유행어가 있나요?",
+        "그 유튜버는 특징적인 웃음소리가 있나요?",
+        "그 유튜버는 알아보기 쉬운 로고가 있나요?",
+        "그 유튜버는 알아보기 쉬운 인트로가 있나요?",
+        "그 유튜버는 다른 대륙에 가 본 적이 있나요?",
+        "그 유튜버는 해변에서 촬영한 적이 있나요?",
+        "그 유튜버는 눈 속에서 촬영한 적이 있나요?",
+        "그 유튜버는 사막에서 촬영한 적이 있나요?",
+        "그 유튜버는 배에서 촬영한 적이 있나요?",
+        "그 유튜버는 비행기에서 촬영한 적이 있나요?",
+        "그 유튜버는 놀이공원에서 촬영한 적이 있나요?",
+        "그 유튜버는 경기장에서 촬영한 적이 있나요?",
+        "그 유튜버는 행사장에서 촬영한 적이 있나요?",
+        "그 유튜버는 호텔에서 촬영한 적이 있나요?",
+        "그 유튜버는 맞춤 PC가 있나요?",
+        "그 유튜버는 모니터가 여러 개 있나요?",
+        "그 유튜버는 RGB 조명을 사용하나요?",
+        "그 유튜버는 맞춤 책상 세팅이 있나요?",
+        "그 유튜버는 게임 방이 있나요?",
+        "그 유튜버는 스튜디오 방이 있나요?",
+        "그 유튜버는 친구들이 근처에 있을 때 녹화하나요?",
+        "그 유튜버는 혼자 녹화하나요?",
+        "그 유튜버는 전문 마이크를 사용하나요?",
+        "그 유튜버는 웹캠을 자주 사용하나요?"
+    ]
+};
+
+/* 💬 FEEDBACK + 📩 CONTACT */
+function openFeedback() {
+    document.getElementById("feedbackBox").style.display = "block";
+    document.getElementById("feedbackThanks").textContent = "";
 }
 
-function updateLanguage() {
+function closeFeedback() {
+    document.getElementById("feedbackBox").style.display = "none";
+}
+
+function submitFeedback() {
     let t = uiText[currentLang];
+    let msg = document.getElementById("feedbackText").value.trim();
+    let lowerMsg = msg.toLowerCase();
 
-    document.getElementById("titleText").textContent = "🏴‍☠️ " + t.title;
-    document.getElementById("introText").textContent = t.intro;
-    document.getElementById("startBtn").textContent = t.start;
-    document.getElementById("feedbackBtn").textContent = t.feedback;
-    document.getElementById("contactBtn").textContent = t.contact;
+    if (msg.length < 12) {
+        alert(t.feedbackTooShort);
+        return;
+    }
 
-    document.getElementById("yesBtn").textContent = t.yes;
-    document.getElementById("noBtn").textContent = t.no;
-    document.getElementById("dkBtn").textContent = t.dk;
-    document.getElementById("probBtn").textContent = t.probably;
-    document.getElementById("probNotBtn").textContent = t.probablyNot;
+    if (
+        lowerMsg === "hi" ||
+        lowerMsg === "hello" ||
+        lowerMsg === "good" ||
+        lowerMsg === "bad" ||
+        lowerMsg === "cool" ||
+        lowerMsg === "ok" ||
+        lowerMsg === "nice" ||
+        lowerMsg === "yes" ||
+        lowerMsg === "no"
+    ) {
+        alert(t.feedbackTooSimple);
+        return;
+    }
 
-    document.getElementById("backBtn").textContent = t.back;
-    document.getElementById("skipBtn").textContent = t.skip;
-    document.getElementById("restartBtn").textContent = t.restart;
+    if (
+        lowerMsg.includes("this website is good") ||
+        lowerMsg.includes("website is good") ||
+        lowerMsg.includes("i like it") ||
+        lowerMsg.includes("it is good") ||
+        lowerMsg.includes("good website")
+    ) {
+        alert(t.feedbackExplain);
+        return;
+    }
 
-    document.getElementById("guessYesBtn").textContent = t.yes;
-    document.getElementById("guessNoBtn").textContent = t.no;
+    if (
+        !lowerMsg.includes("button") &&
+        !lowerMsg.includes("game") &&
+        !lowerMsg.includes("question") &&
+        !lowerMsg.includes("captain") &&
+        !lowerMsg.includes("clue") &&
+        !lowerMsg.includes("youtuber") &&
+        !lowerMsg.includes("youtube") &&
+        !lowerMsg.includes("language") &&
+        !lowerMsg.includes("feedback") &&
+        !lowerMsg.includes("start") &&
+        !lowerMsg.includes("guess") &&
+        !lowerMsg.includes("pirate") &&
+        !lowerMsg.includes("fix") &&
+        !lowerMsg.includes("bug") &&
+        !lowerMsg.includes("better") &&
+        !lowerMsg.includes("wrong") &&
+        !lowerMsg.includes("broken") &&
+        !lowerMsg.includes("color") &&
+        !lowerMsg.includes("small") &&
+        !lowerMsg.includes("big")
+    ) {
+        alert(t.feedbackNotWebsite);
+        return;
+    }
 
-    document.getElementById("continueText").textContent = t.continueText;
-    document.getElementById("continueYesBtn").textContent = t.yes;
-    document.getElementById("continueNoBtn").textContent = t.no;
+    document.getElementById("feedbackThanks").textContent = t.feedbackThanks;
+    document.getElementById("feedbackText").value = "";
+}
 
-    document.getElementById("winnerTitle").textContent = t.winnerTitle;
-    document.getElementById("winnerPrompt").textContent = t.winnerPrompt;
-    document.getElementById("saveBtn").textContent = t.save;
+function openContact() {
+    let t = uiText[currentLang];
+    let msg = prompt(t.contactPrompt);
+
+    if (msg && msg.trim() !== "") {
+        window.location.href =
+            "sms:" + CONTACT_ADDRESS + "?&body=" + encodeURIComponent(msg);
+    }
 }
 
 /* 🎮 GAME DATA */
@@ -754,85 +1472,20 @@ let youtubers = [
     "GamingWithKev",
     "ProjectJamesify",
     "Poke",
-    "KreekCraft"
-
-
-
-const questions = [
-    "ARE YOU READY TO PLAY GUESS THE YOUTUBER!?!",
-    "Did your YouTuber become famous before 2020?",
-    "Did your YouTuber become famous after 2020?",
-    "Does your YouTuber have a verified channel?",
-    "Has your YouTuber ever changed their profile picture?",
-    "Does your YouTuber usually upload in English?",
-    "Does your YouTuber have an accent that fans recognize?",
-    "Does your YouTuber use custom thumbnails?",
-    "Does your YouTuber appear in every video?",
-    "Does your YouTuber sometimes let friends take over videos?",
-    "Does your YouTuber own more than one channel?",
-    "Has your YouTuber ever built something huge?",
-    "Has your YouTuber ever survived 100 days in a game?",
-    "Has your YouTuber ever completed a challenge series?",
-    "Has your YouTuber ever competed against friends?",
-    "Has your YouTuber ever hidden clues in videos?",
-    "Has your YouTuber ever done a giveaway?",
-    "Has your YouTuber ever made a charity video?",
-    "Has your YouTuber ever done a subscriber special?",
-    "Has your YouTuber ever celebrated a milestone on camera?",
-    "Has your YouTuber ever broken a world record?",
-    "Does your YouTuber own custom merchandise?",
-    "Does your YouTuber have their own brand?",
-    "Does your YouTuber have a famous pet?",
-    "Does your YouTuber often wear the same color?",
-    "Does your YouTuber use a cartoon version of themselves?",
-    "Does your YouTuber use a custom avatar?",
-    "Does your YouTuber appear in animated videos?",
-    "Does your YouTuber make content with siblings?",
-    "Does your YouTuber make content with their spouse?",
-    "Does your YouTuber make content with their parents?",
-    "Does your YouTuber usually smile in thumbnails?",
-    "Does your YouTuber make dramatic thumbnails?",
-    "Does your YouTuber use arrows in thumbnails?",
-    "Does your YouTuber use circles in thumbnails?",
-    "Does your YouTuber play games competitively?",
-    "Does your YouTuber play games casually?",
-    "Does your YouTuber make challenge content?",
-    "Does your YouTuber make experiment content?",
-    "Does your YouTuber make educational content?",
-    "Does your YouTuber make comedy content?",
-    "Would elementary school students know this YouTuber?",
-    "Would middle school students know this YouTuber?",
-    "Would high school students know this YouTuber?",
-    "Would college students know this YouTuber?",
-    "Would gamers recognize this YouTuber?",
-    "Would non-gamers recognize this YouTuber?",
-    "Does your YouTuber have a famous catchphrase?",
-    "Does your YouTuber have a signature laugh?",
-    "Does your YouTuber have a recognizable logo?",
-    "Does your YouTuber have a recognizable intro?",
-    "Has your YouTuber ever visited another continent?",
-    "Has your YouTuber ever filmed on a beach?",
-    "Has your YouTuber ever filmed in the snow?",
-    "Has your YouTuber ever filmed in a desert?",
-    "Has your YouTuber ever filmed on a boat?",
-    "Has your YouTuber ever filmed in an airplane?",
-    "Has your YouTuber ever filmed at a theme park?",
-    "Has your YouTuber ever filmed in a stadium?",
-    "Has your YouTuber ever filmed at a convention?",
-    "Has your YouTuber ever filmed in a hotel?",
-    "Does your YouTuber own a custom PC?",
-    "Does your YouTuber own multiple monitors?",
-    "Does your YouTuber use RGB lights?",
-    "Does your YouTuber have a custom desk setup?",
-    "Does your YouTuber have a gaming room?",
-    "Does your YouTuber have a studio room?",
-    "Does your YouTuber record with friends nearby?",
-    "Does your YouTuber record alone?",
-    "Does your YouTuber use a professional microphone?",
-    "Does your YouTuber use a webcam regularly?"
+    "KreekCraft",
+    "Diddens Fans"
 ];
 
 /* 🎮 GAME FUNCTIONS */
+function getQuestions() {
+    return questionsByLang[currentLang] || questionsByLang.en;
+}
+
+function getQuestionText() {
+    let translated = getQuestions();
+    return translated[currentQuestion] || questionsByLang.en[currentQuestion];
+}
+
 function showPage(pageId) {
     document.getElementById("homePage").style.display = "none";
     document.getElementById("gamePage").style.display = "none";
@@ -841,6 +1494,7 @@ function showPage(pageId) {
     document.getElementById("winnerPage").style.display = "none";
 
     document.getElementById(pageId).style.display = "flex";
+    currentPage = pageId;
 }
 
 function startGame() {
@@ -849,7 +1503,7 @@ function startGame() {
     guessedAlready = [];
 
     showPage("gamePage");
-    document.getElementById("question").textContent = questions[currentQuestion];
+    document.getElementById("question").textContent = getQuestionText();
 }
 
 function answer(type) {
@@ -867,40 +1521,16 @@ function answer(type) {
 function nextQuestion() {
     currentQuestion++;
 
-    if (confidence >= 250 || currentQuestion >= questions.length) {
+    if (confidence >= 250 || currentQuestion >= questionsByLang.en.length) {
         makeGuess();
         return;
     }
 
-    document.getElementById("question").textContent = questions[currentQuestion];
-}
-
-function setGuessImage(paths) {
-    let img = document.getElementById("guessImg");
-    let pathIndex = 0;
-
-    if (!Array.isArray(paths)) {
-        paths = [paths];
-    }
-
-    img.onerror = function () {
-        pathIndex++;
-
-        if (pathIndex < paths.length) {
-            img.src = paths[pathIndex];
-        } else {
-            img.onerror = null;
-            img.alt = "Image not found";
-        }
-    };
-
-    img.src = paths[0];
+    document.getElementById("question").textContent = getQuestionText();
 }
 
 function makeGuess() {
-    let youtubersWithImages = Object.keys(youtuberImages);
-
-    let available = youtubersWithImages.filter(name => !guessedAlready.includes(name));
+    let available = youtubers.filter(name => !guessedAlready.includes(name));
 
     if (available.length === 0) {
         showWinnerPage();
@@ -913,16 +1543,12 @@ function makeGuess() {
     document.getElementById("guessText").innerHTML =
         uiText[currentLang].guessStart + "<b>" + currentGuess + "</b>?";
 
-    let imagePaths = youtuberImages[currentGuess];
-
-    setGuessImage(imagePaths);
-
     showPage("guessPage");
 }
 
 function handleGuessResult(isCorrect) {
     if (isCorrect) {
-        alert("The Captain wins again! Huzzah! 🏴‍☠️");
+        alert(uiText[currentLang].captainWins);
         restartGame();
     } else {
         showPage("continuePage");
@@ -930,13 +1556,13 @@ function handleGuessResult(isCorrect) {
 }
 
 function continueGame() {
-    if (currentQuestion >= questions.length) {
+    if (currentQuestion >= questionsByLang.en.length) {
         makeGuess();
         return;
     }
 
     showPage("gamePage");
-    document.getElementById("question").textContent = questions[currentQuestion];
+    document.getElementById("question").textContent = getQuestionText();
 }
 
 function showWinnerPage() {
@@ -946,7 +1572,7 @@ function showWinnerPage() {
 function goBack() {
     if (currentQuestion > 0) {
         currentQuestion--;
-        document.getElementById("question").textContent = questions[currentQuestion];
+        document.getElementById("question").textContent = getQuestionText();
     }
 }
 
@@ -963,11 +1589,62 @@ function saveNewYoutuber() {
 
     if (name !== "") {
         youtubers.push(name);
-        alert("Thank you for teaching Captain Clue a new YouTuber!\n\nSaved: " + name);
+        alert(uiText[currentLang].savedStart + name);
         restartGame();
     }
 }
 
+function setLang() {
+    currentLang = document.getElementById("lang").value;
+    updateLanguage();
+}
+
+function updateLanguage() {
+    let t = uiText[currentLang];
+
+    document.getElementById("titleText").textContent = "🏴‍☠️ " + t.title;
+    document.getElementById("introText").textContent = t.intro;
+    document.getElementById("startBtn").textContent = t.start;
+    document.getElementById("feedbackBtn").textContent = t.feedback;
+    document.getElementById("contactBtn").textContent = t.contact;
+
+    document.getElementById("feedbackTitle").textContent = t.feedbackTitle;
+    document.getElementById("feedbackText").placeholder = t.feedbackPlaceholder;
+    document.getElementById("feedbackSubmitBtn").textContent = t.feedbackSubmit;
+    document.getElementById("feedbackCloseBtn").textContent = t.feedbackClose;
+
+    document.getElementById("yesBtn").textContent = t.yes;
+    document.getElementById("noBtn").textContent = t.no;
+    document.getElementById("dkBtn").textContent = t.dk;
+    document.getElementById("probBtn").textContent = t.probably;
+    document.getElementById("probNotBtn").textContent = t.probablyNot;
+
+    document.getElementById("backBtn").textContent = t.back;
+    document.getElementById("skipBtn").textContent = t.skip;
+    document.getElementById("restartBtn").textContent = t.restart;
+
+    document.getElementById("guessYesBtn").textContent = t.yes;
+    document.getElementById("guessNoBtn").textContent = t.no;
+
+    document.getElementById("continueText").textContent = t.continueText;
+    document.getElementById("continueYesBtn").textContent = t.yes;
+    document.getElementById("continueNoBtn").textContent = t.no;
+
+    document.getElementById("winnerTitle").textContent = t.winnerTitle;
+    document.getElementById("winnerPrompt").textContent = t.winnerPrompt;
+    document.getElementById("saveBtn").textContent = t.save;
+
+    if (currentPage === "gamePage") {
+        document.getElementById("question").textContent = getQuestionText();
+    }
+
+    if (currentPage === "guessPage" && currentGuess !== "") {
+        document.getElementById("guessText").innerHTML =
+            t.guessStart + "<b>" + currentGuess + "</b>?";
+    }
+}
+
+/* 🚀 START */
 window.onload = function () {
     showPage("homePage");
     updateLanguage();
