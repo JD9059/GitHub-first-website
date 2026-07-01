@@ -1157,59 +1157,105 @@ function submitFeedback() {
     let msg = document.getElementById("feedbackText").value.trim();
     let lowerMsg = msg.toLowerCase();
 
-    if (msg.length < 12) {
+    let cleanMsg = lowerMsg
+        .replace(/[.,!?]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    // Too short = reject
+    if (msg.length < 8) {
         alert(t.feedbackTooShort);
         return;
     }
 
+    // Reject nonsense, tiny messages, or keyboard spam
     if (
-        lowerMsg === "hi" ||
-        lowerMsg === "hello" ||
-        lowerMsg === "good" ||
-        lowerMsg === "bad" ||
-        lowerMsg === "cool" ||
-        lowerMsg === "ok" ||
-        lowerMsg === "nice" ||
-        lowerMsg === "yes" ||
-        lowerMsg === "no"
+        cleanMsg === "hi" ||
+        cleanMsg === "hello" ||
+        cleanMsg === "hey" ||
+        cleanMsg === "hi jack" ||
+        cleanMsg === "ok" ||
+        cleanMsg === "okay" ||
+        cleanMsg === "yes" ||
+        cleanMsg === "no" ||
+        cleanMsg === "asdf" ||
+        cleanMsg === "asdfasdf" ||
+        cleanMsg === "aaaa" ||
+        /(.)\1{6,}/.test(cleanMsg)
     ) {
         alert(t.feedbackTooSimple);
         return;
     }
 
+    // Reject only the super-basic version you said is NOT real feedback
     if (
-        lowerMsg.includes("this website is good") ||
-        lowerMsg.includes("website is good") ||
-        lowerMsg.includes("i like it") ||
-        lowerMsg.includes("it is good") ||
-        lowerMsg.includes("good website")
+        cleanMsg === "i like your website" ||
+        cleanMsg === "hi jack i like your website" ||
+        cleanMsg === "i like it" ||
+        cleanMsg === "i like this"
     ) {
         alert(t.feedbackExplain);
         return;
     }
 
-    if (
-        !lowerMsg.includes("button") &&
-        !lowerMsg.includes("game") &&
-        !lowerMsg.includes("question") &&
-        !lowerMsg.includes("captain") &&
-        !lowerMsg.includes("clue") &&
-        !lowerMsg.includes("youtuber") &&
-        !lowerMsg.includes("youtube") &&
-        !lowerMsg.includes("language") &&
-        !lowerMsg.includes("feedback") &&
-        !lowerMsg.includes("start") &&
-        !lowerMsg.includes("guess") &&
-        !lowerMsg.includes("pirate") &&
-        !lowerMsg.includes("fix") &&
-        !lowerMsg.includes("bug") &&
-        !lowerMsg.includes("better") &&
-        !lowerMsg.includes("wrong") &&
-        !lowerMsg.includes("broken") &&
-        !lowerMsg.includes("color") &&
-        !lowerMsg.includes("small") &&
-        !lowerMsg.includes("big")
-    ) {
+    // These are GOOD feedback and SHOULD go through
+    // Examples allowed:
+    // "This website is the best. Don't change anything."
+    // "Hi Jack, your website is the best. You should do more."
+    // "Nothing needs to be changed."
+    // "The game is awesome."
+    let goodFeedbackWords = [
+        "best",
+        "awesome",
+        "amazing",
+        "great",
+        "perfect",
+        "fun",
+        "cool",
+        "good job",
+        "love",
+        "like",
+        "dont change",
+        "don't change",
+        "do not change",
+        "nothing needs to be changed",
+        "nothing has to be changed",
+        "nothing should be changed",
+        "no changes",
+        "should",
+        "add",
+        "fix",
+        "better",
+        "change",
+        "more",
+        "bug",
+        "broken",
+        "works",
+        "working",
+        "captain",
+        "clue",
+        "game",
+        "website",
+        "button",
+        "language",
+        "question",
+        "guess",
+        "pirate",
+        "youtuber",
+        "youtube",
+        "feedback",
+        "start",
+        "screen",
+        "color",
+        "image",
+        "animation"
+    ];
+
+    let hasRealFeedback = goodFeedbackWords.some(word =>
+        cleanMsg.includes(word)
+    );
+
+    if (!hasRealFeedback) {
         alert(t.feedbackNotWebsite);
         return;
     }
