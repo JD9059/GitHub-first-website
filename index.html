@@ -48,6 +48,9 @@
             cursor: pointer;
             background: white;
             z-index: 9999;
+            text-decoration: none;
+            color: black;
+            display: inline-block;
         }
 
         .pirate-img {
@@ -193,7 +196,8 @@
     </select>
 
     <button id="feedbackBtn" onclick="openFeedback()">💬 Feedback</button>
-    <button id="contactBtn" onclick="openContact()">📩 Contact Me</button>
+
+    <a id="contactBtn" href="sms:jackbug412@icloud.com?&body=Hi%20Captain%20Jack!%20I%20am%20messaging%20from%20the%20Captain%20Clue%20website.">📩 Contact Me</a>
 
     <div id="feedbackBox">
         <h3 id="feedbackTitle">Feedback</h3>
@@ -289,9 +293,6 @@
 
 <script>
 
-/* 📩 CONTACT SETTINGS */
-const CONTACT_ADDRESS = "jackbug412@icloud.com";
-
 /* 🌍 LANGUAGE DATA */
 let currentLang = "en";
 let currentPage = "homePage";
@@ -312,7 +313,6 @@ const uiText = {
         feedbackTooSimple: "That feedback is too short or does not explain anything.",
         feedbackExplain: "Please explain what is good or what should be better.",
         feedbackNotWebsite: "That does not seem like feedback about the website.",
-        contactPrompt: "Type your message to Captain Clue:",
         yes: "Yes",
         no: "No",
         dk: "Don't Know",
@@ -344,7 +344,6 @@ const uiText = {
         feedbackTooSimple: "Ese comentario es muy corto o no explica nada.",
         feedbackExplain: "Explica qué es bueno o qué debería mejorar.",
         feedbackNotWebsite: "Eso no parece ser un comentario sobre el sitio web.",
-        contactPrompt: "Escribe tu mensaje para Capitán Clue:",
         yes: "Sí",
         no: "No",
         dk: "No sé",
@@ -376,7 +375,6 @@ const uiText = {
         feedbackTooSimple: "Cet avis est trop court ou n’explique rien.",
         feedbackExplain: "Explique ce qui est bien ou ce qui devrait être amélioré.",
         feedbackNotWebsite: "Cela ne semble pas être un avis sur le site.",
-        contactPrompt: "Écris ton message à Capitaine Clue :",
         yes: "Oui",
         no: "Non",
         dk: "Je ne sais pas",
@@ -408,7 +406,6 @@ const uiText = {
         feedbackTooSimple: "Dieses Feedback ist zu kurz oder erklärt nichts.",
         feedbackExplain: "Erkläre bitte, was gut ist oder was besser sein sollte.",
         feedbackNotWebsite: "Das scheint kein Feedback zur Webseite zu sein.",
-        contactPrompt: "Schreibe deine Nachricht an Captain Clue:",
         yes: "Ja",
         no: "Nein",
         dk: "Weiß nicht",
@@ -440,7 +437,6 @@ const uiText = {
         feedbackTooSimple: "Questo feedback è troppo corto o non spiega nulla.",
         feedbackExplain: "Spiega cosa è buono o cosa dovrebbe migliorare.",
         feedbackNotWebsite: "Questo non sembra un feedback sul sito.",
-        contactPrompt: "Scrivi il tuo messaggio a Capitano Clue:",
         yes: "Sì",
         no: "No",
         dk: "Non lo so",
@@ -472,7 +468,6 @@ const uiText = {
         feedbackTooSimple: "Esse feedback é muito curto ou não explica nada.",
         feedbackExplain: "Explique o que é bom ou o que deveria melhorar.",
         feedbackNotWebsite: "Isso não parece ser feedback sobre o site.",
-        contactPrompt: "Digite sua mensagem para o Capitão Clue:",
         yes: "Sim",
         no: "Não",
         dk: "Não sei",
@@ -504,7 +499,6 @@ const uiText = {
         feedbackTooSimple: "短すぎるか、何も説明していません。",
         feedbackExplain: "何が良いか、何を直すべきかを書いてね。",
         feedbackNotWebsite: "これはサイトについてのフィードバックに見えません。",
-        contactPrompt: "Captain Clueへのメッセージを書いてね：",
         yes: "はい",
         no: "いいえ",
         dk: "わからない",
@@ -536,7 +530,6 @@ const uiText = {
         feedbackTooSimple: "그 피드백은 너무 짧거나 설명이 없어요.",
         feedbackExplain: "무엇이 좋은지 또는 무엇을 고치면 좋을지 설명해 주세요.",
         feedbackNotWebsite: "이 웹사이트에 대한 피드백 같지 않아요.",
-        contactPrompt: "캡틴 클루에게 보낼 메시지를 입력하세요:",
         yes: "예",
         no: "아니요",
         dk: "모르겠어요",
@@ -1149,7 +1142,7 @@ const questionsByLang = {
     ]
 };
 
-/* 💬 FEEDBACK + 📩 CONTACT */
+/* 💬 FEEDBACK */
 function openFeedback() {
     document.getElementById("feedbackBox").style.display = "block";
     document.getElementById("feedbackThanks").textContent = "";
@@ -1223,16 +1216,6 @@ function submitFeedback() {
 
     document.getElementById("feedbackThanks").textContent = t.feedbackThanks;
     document.getElementById("feedbackText").value = "";
-}
-
-function openContact() {
-    let t = uiText[currentLang];
-    let msg = prompt(t.contactPrompt);
-
-    if (msg && msg.trim() !== "") {
-        window.location.href =
-            "sms:" + CONTACT_ADDRESS + "?&body=" + encodeURIComponent(msg);
-    }
 }
 
 /* 🎮 GAME DATA */
@@ -1472,8 +1455,7 @@ let youtubers = [
     "GamingWithKev",
     "ProjectJamesify",
     "Poke",
-    "KreekCraft",
-    "Diddens Fans"
+    "KreekCraft"
 ];
 
 /* 🎮 GAME FUNCTIONS */
